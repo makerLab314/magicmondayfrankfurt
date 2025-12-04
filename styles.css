@@ -1,50 +1,79 @@
-/* Basic structural styling for Magic Monday Frankfurt */
+/* Magic Monday Frankfurt - Modern Retro Magic Style */
+
+/* CSS Variables für konsistente Farben */
+:root {
+	--magic-dark: #1a1a2e;
+	--magic-purple: #4a3f6b;
+	--magic-gold: #d4af37;
+	--magic-red: #c41e3a;
+	--retro-blue: #345;
+	--retro-light: #5B7896;
+	--nav-bg: #A5B3C0;
+	--content-bg: #EEE;
+	--text-dark: #012;
+}
+
+* {
+	box-sizing: border-box;
+}
 
 body {
 	margin: 0;
-	background-color: #EEEEEE;
-	background-image: url('images/hintergrund.jpg');
+	background-color: var(--magic-dark);
+	background-image: 
+		radial-gradient(ellipse at top, rgba(74, 63, 107, 0.3) 0%, transparent 50%),
+		url('images/hintergrund.jpg');
+	background-attachment: fixed;
+	min-height: 100vh;
 }
 
 .container {
-	width: 750px;
+	width: 100%;
+	max-width: 850px;
 	margin: 0 auto;
+	padding: 0 15px;
 }
 
+/* Verbesserte Typografie */
 p {
-	font: normal 11px/140% Verdana, Tahoma, Helvetica, sans-serif;
-	margin: 0px 0px 5px 0px;
-	padding: 0px;
+	font: normal 14px/170% 'Georgia', 'Times New Roman', serif;
+	margin: 0 0 12px 0;
+	padding: 0;
+	color: #333;
 }
 
 h1 {
-	color: #345;
-	font: bold 15px/140% Verdana, Tahoma, Helvetica, sans-serif;
+	color: var(--retro-blue);
+	font: bold 22px/140% 'Georgia', 'Times New Roman', serif;
 	letter-spacing: 1px;
-	margin: 0px 0px 5px 0px;
-	padding: 0px;
+	margin: 0 0 15px 0;
+	padding: 0;
+	text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
 }
 
 h2 {
-	color: #345;
-	font: bold 13px/140% Verdana, Tahoma, Helvetica, sans-serif;
-	margin: 0px 0px 5px 0px;
-	padding: 0px;
+	color: var(--retro-blue);
+	font: bold 18px/140% 'Georgia', 'Times New Roman', serif;
+	margin: 0 0 10px 0;
+	padding: 0;
 }
 
 b {
 	color: #456;
 }
 
+/* Links mit magischem Hover-Effekt */
 a {
-	color: #5B7896;
+	color: var(--retro-light);
 	font-weight: bold;
 	text-decoration: underline;
+	transition: all 0.3s ease;
 }
 
 a:hover {
-	color: #FF0000;
+	color: var(--magic-red);
 	text-decoration: underline;
+	text-shadow: 0 0 8px rgba(196, 30, 58, 0.4);
 }
 
 header {
@@ -52,75 +81,203 @@ header {
 }
 
 #head {
-	width: 750px;
-	height: 100px;
-	margin: 15px 0px 0px 0px;
-	padding: 0px;
+	width: 100%;
+	max-width: 750px;
+	margin: 20px auto 0;
+	padding: 0;
 	border: none;
+	overflow: hidden;
+	border-radius: 8px 8px 0 0;
+	box-shadow: 0 -5px 20px rgba(212, 175, 55, 0.2);
 }
 
+#head img {
+	width: 100%;
+	height: auto;
+	display: block;
+	transition: transform 0.5s ease;
+}
+
+#head:hover img {
+	transform: scale(1.02);
+}
+
+/* Navigation mit Hover-Magie */
 #head_navigation {
 	display: block;
-	color: #012;
-	width: auto;
-	height: auto;
+	color: var(--text-dark);
 	text-align: center;
-	margin: 0px 0px 0px 0px;
-	padding-top: 6px;
-	padding-bottom: 5px;
-	border-bottom: 1px solid #234;
-	background-color: #A5B3C0;
+	margin: 0;
+	padding: 12px 10px;
+	border-bottom: 2px solid var(--magic-purple);
+	background: linear-gradient(180deg, #b8c4cf 0%, var(--nav-bg) 100%);
+	box-shadow: 0 2px 10px rgba(0,0,0,0.2);
 }
 
 #head_navigation a {
 	color: #123;
-	font: bold 11px/100% Verdana, Tahoma, Helvetica, sans-serif;
+	font: bold 12px/100% 'Verdana', 'Tahoma', 'Helvetica', sans-serif;
 	text-transform: uppercase;
 	text-decoration: none;
+	padding: 8px 12px;
+	border-radius: 4px;
+	transition: all 0.3s ease;
+	display: inline-block;
+	margin: 2px 0;
 }
 
 #head_navigation a:hover {
-	color: #FF0000;
+	color: #FFF;
+	background: var(--magic-purple);
+	text-shadow: 0 0 10px rgba(255,255,255,0.5);
+	transform: translateY(-2px);
 }
 
 #head_navigation .off {
 	color: #FFF;
-	font: bold 11px/100% Verdana, Tahoma, Helvetica, sans-serif;
+	font: bold 12px/100% 'Verdana', 'Tahoma', 'Helvetica', sans-serif;
 	text-transform: uppercase;
+	background: var(--magic-purple);
+	padding: 8px 12px;
+	border-radius: 4px;
+	display: inline-block;
+	box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
 }
 
+/* Content-Bereich mit sanftem Erscheinen */
 .column {
 	color: #000;
-	background: #EEE;
+	background: linear-gradient(180deg, #f5f5f5 0%, var(--content-bg) 100%);
 	width: auto;
-	margin: 0px;
-	padding: 25px 15px 30px 15px;
+	margin: 0;
+	padding: 30px 25px 40px;
+	animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 
 .column img {
-	margin: 0px 0px 10px 0px;
+	margin: 0 0 15px 0;
+	border-radius: 5px;
+	box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+	transition: all 0.4s ease;
+	max-width: 100%;
+	height: auto;
 }
 
+.column img:hover {
+	transform: scale(1.03);
+	box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
+}
+
+/* Footer mit magischem Glanz */
 #footer {
 	display: block;
-	color: #012;
-	font: bold 9px/140% Verdana, Tahoma, Helvetica, sans-serif;
-	width: auto;
-	height: auto;
+	color: var(--text-dark);
+	font: bold 10px/160% 'Verdana', 'Tahoma', 'Helvetica', sans-serif;
 	text-align: center;
-	margin: 0px 0px 0px 0px;
-	padding-top: 7px;
-	padding-bottom: 7px;
-	border-top: 1px solid #234;
-	background-color: #A5B3C0;
+	margin: 0;
+	padding: 15px 10px;
+	border-top: 2px solid var(--magic-purple);
+	background: linear-gradient(180deg, var(--nav-bg) 0%, #8a9baa 100%);
+	border-radius: 0 0 8px 8px;
+	box-shadow: 0 5px 20px rgba(0,0,0,0.3);
 }
 
 #footer a {
 	color: #123;
 	font-weight: bold;
 	text-decoration: none;
+	transition: all 0.3s ease;
 }
 
 #footer a:hover {
-	color: #FF0000;
+	color: var(--magic-red);
+	text-shadow: 0 0 5px rgba(196, 30, 58, 0.3);
+}
+
+/* Magische Sparkle-Animation für besondere Elemente */
+@keyframes sparkle {
+	0%, 100% { opacity: 0.6; }
+	50% { opacity: 1; }
+}
+
+.magic-sparkle {
+	position: relative;
+}
+
+.magic-sparkle::after {
+	content: '✨';
+	position: absolute;
+	animation: sparkle 2s ease-in-out infinite;
+}
+
+/* Responsive Design für mobile Geräte */
+@media (max-width: 768px) {
+	.container {
+		padding: 0 10px;
+	}
+	
+	#head_navigation {
+		padding: 10px 5px;
+	}
+	
+	#head_navigation a,
+	#head_navigation .off {
+		font-size: 10px;
+		padding: 6px 8px;
+		margin: 2px 1px;
+	}
+	
+	h1 {
+		font-size: 18px;
+	}
+	
+	h2 {
+		font-size: 15px;
+	}
+	
+	p {
+		font-size: 13px;
+	}
+	
+	.column {
+		padding: 20px 15px 30px;
+	}
+	
+	.column img[style*="float: right"] {
+		float: none !important;
+		display: block;
+		margin: 0 auto 15px !important;
+		max-width: 280px;
+	}
+}
+
+/* Table-Styling für Legacy-Seiten */
+table {
+	max-width: 100%;
+}
+
+table[width="750"] {
+	width: 100% !important;
+	max-width: 850px !important;
+}
+
+td.column {
+	background: linear-gradient(180deg, #f5f5f5 0%, var(--content-bg) 100%);
+	padding: 25px 20px;
+}
+
+/* Smooth Scroll für angenehme Navigation */
+html {
+	scroll-behavior: smooth;
 }
