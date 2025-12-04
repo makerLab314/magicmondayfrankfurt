@@ -1,6 +1,6 @@
 /* Magic Monday Frankfurt - Modern Retro Magic Style */
 
-/* CSS Variables für konsistente Farben */
+/* CSS Variables for consistent colors */
 :root {
 	--magic-dark: #1a1a2e;
 	--magic-purple: #4a3f6b;
@@ -221,7 +221,7 @@ header {
 	animation: sparkle 2s ease-in-out infinite;
 }
 
-/* Responsive Design für mobile Geräte */
+/* Responsive Design for mobile devices */
 @media (max-width: 768px) {
 	.container {
 		padding: 0 10px;
@@ -254,22 +254,29 @@ header {
 		padding: 20px 15px 30px;
 	}
 	
-	.column img[style*="float: right"] {
-		float: none !important;
+	/* Override inline float styles on mobile */
+	.column img {
+		float: none;
 		display: block;
-		margin: 0 auto 15px !important;
+		margin: 0 auto 15px;
 		max-width: 280px;
 	}
 }
 
-/* Table-Styling für Legacy-Seiten */
+/* Sparkle animation for magic particles */
+@keyframes sparkleFloat {
+	0% { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
+	100% { opacity: 0; transform: translateY(-30px) rotate(180deg) scale(0); }
+}
+
+/* Table styling for legacy pages */
 table {
 	max-width: 100%;
 }
 
 table[width="750"] {
-	width: 100% !important;
-	max-width: 850px !important;
+	width: 100%;
+	max-width: 850px;
 }
 
 td.column {

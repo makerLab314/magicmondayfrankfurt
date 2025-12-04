@@ -3,19 +3,19 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Magic Monday Frankfurt - Die Magie beginnt! ✨');
     
-    // Sanftes Einblenden des Inhalts
+    // Smooth fade-in effect for content
     fadeInContent();
     
-    // Magische Sparkle-Effekte bei Mausbewegung
+    // Magic sparkle effects on mouse movement
     initMagicSparkles();
     
-    // Parallax-Effekt für den Hintergrund
+    // Parallax effect for background
     initParallax();
 });
 
-// Sanftes Einblenden des Hauptinhalts
+// Smooth fade-in for main content
 function fadeInContent() {
-    var columns = document.querySelectorAll('.column');
+    const columns = document.querySelectorAll('.column');
     columns.forEach(function(column, index) {
         column.style.opacity = '0';
         column.style.transform = 'translateY(20px)';
@@ -27,17 +27,17 @@ function fadeInContent() {
     });
 }
 
-// Magische Sparkle-Effekte
+// Magic sparkle effects
 function initMagicSparkles() {
-    var lastSparkleTime = 0;
-    var sparkleThrottle = 100; // ms zwischen Sparkles
+    let lastSparkleTime = 0;
+    const sparkleThrottle = 100; // ms between sparkles
     
     document.addEventListener('mousemove', function(e) {
-        var now = Date.now();
+        const now = Date.now();
         if (now - lastSparkleTime < sparkleThrottle) return;
         lastSparkleTime = now;
         
-        // Nur gelegentlich Sparkles erzeugen (20% Chance)
+        // Only create sparkles occasionally (20% chance)
         if (Math.random() > 0.2) return;
         
         createSparkle(e.clientX, e.clientY);
@@ -45,7 +45,7 @@ function initMagicSparkles() {
 }
 
 function createSparkle(x, y) {
-    var sparkle = document.createElement('div');
+    const sparkle = document.createElement('div');
     sparkle.className = 'magic-particle';
     sparkle.innerHTML = '✦';
     sparkle.style.cssText = 
@@ -60,7 +60,7 @@ function createSparkle(x, y) {
     
     document.body.appendChild(sparkle);
     
-    // Sparkle nach Animation entfernen
+    // Remove sparkle after animation
     setTimeout(function() {
         if (sparkle.parentNode) {
             sparkle.parentNode.removeChild(sparkle);
@@ -68,14 +68,14 @@ function createSparkle(x, y) {
     }, 1000);
 }
 
-// Parallax-Effekt für den Hintergrund
+// Parallax effect for background
 function initParallax() {
-    var ticking = false;
+    let ticking = false;
     
     window.addEventListener('scroll', function() {
         if (!ticking) {
             window.requestAnimationFrame(function() {
-                var scrolled = window.pageYOffset;
+                const scrolled = window.pageYOffset;
                 document.body.style.backgroundPositionY = scrolled * 0.3 + 'px';
                 ticking = false;
             });
@@ -83,12 +83,3 @@ function initParallax() {
         }
     });
 }
-
-// CSS für Sparkle-Animation dynamisch hinzufügen
-var styleSheet = document.createElement('style');
-styleSheet.textContent = 
-    '@keyframes sparkleFloat {' +
-    '    0% { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }' +
-    '    100% { opacity: 0; transform: translateY(-30px) rotate(180deg) scale(0); }' +
-    '}';
-document.head.appendChild(styleSheet);
