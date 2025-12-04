@@ -35,7 +35,11 @@ function handleResponsiveImages() {
     
     images.forEach(function(img) {
         if (windowWidth < 768) {
-            img.style.cssText = 'width: 100%; max-width: 100%; float: none !important; margin: 0 0 1rem 0 !important; display: block;';
+            img.style.width = '100%';
+            img.style.maxWidth = '100%';
+            img.style.float = 'none';
+            img.style.margin = '0 0 1rem 0';
+            img.style.display = 'block';
         } else if (windowWidth < 1200) {
             if (img.getAttribute('style') && img.getAttribute('style').indexOf('float') !== -1) {
                 img.style.maxWidth = '45%';
@@ -50,7 +54,18 @@ function handleResponsiveImages() {
 
 // Smooth fade-in animations
 function initSmoothAnimations() {
+    // Check for reduced motion preference
+    var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    
     var elements = document.querySelectorAll('.column, article.column, section.column, td.column');
+    
+    if (prefersReducedMotion) {
+        // Skip animations for users who prefer reduced motion
+        elements.forEach(function(el) {
+            el.style.opacity = '1';
+        });
+        return;
+    }
     
     if ('IntersectionObserver' in window) {
         var observer = new IntersectionObserver(function(entries) {
