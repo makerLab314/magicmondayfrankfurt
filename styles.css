@@ -1,0 +1,126 @@
+/* Basic structural styling for Magic Monday Frankfurt */
+
+body {
+	margin: 0;
+	background-color: #EEEEEE;
+	background-image: url('images/hintergrund.jpg');
+}
+
+.container {
+	width: 750px;
+	margin: 0 auto;
+}
+
+p {
+	font: normal 11px/140% Verdana, Tahoma, Helvetica, sans-serif;
+	margin: 0px 0px 5px 0px;
+	padding: 0px;
+}
+
+h1 {
+	color: #345;
+	font: bold 15px/140% Verdana, Tahoma, Helvetica, sans-serif;
+	letter-spacing: 1px;
+	margin: 0px 0px 5px 0px;
+	padding: 0px;
+}
+
+h2 {
+	color: #345;
+	font: bold 13px/140% Verdana, Tahoma, Helvetica, sans-serif;
+	margin: 0px 0px 5px 0px;
+	padding: 0px;
+}
+
+b {
+	color: #456;
+}
+
+a {
+	color: #5B7896;
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+a:hover {
+	color: #FF0000;
+	text-decoration: underline;
+}
+
+header {
+	display: block;
+}
+
+#head {
+	width: 750px;
+	height: 100px;
+	margin: 15px 0px 0px 0px;
+	padding: 0px;
+	border: none;
+}
+
+#head_navigation {
+	display: block;
+	color: #012;
+	width: auto;
+	height: auto;
+	text-align: center;
+	margin: 0px 0px 0px 0px;
+	padding-top: 6px;
+	padding-bottom: 5px;
+	border-bottom: 1px solid #234;
+	background-color: #A5B3C0;
+}
+
+#head_navigation a {
+	color: #123;
+	font: bold 11px/100% Verdana, Tahoma, Helvetica, sans-serif;
+	text-transform: uppercase;
+	text-decoration: none;
+}
+
+#head_navigation a:hover {
+	color: #FF0000;
+}
+
+#head_navigation .off {
+	color: #FFF;
+	font: bold 11px/100% Verdana, Tahoma, Helvetica, sans-serif;
+	text-transform: uppercase;
+}
+
+.column {
+	color: #000;
+	background: #EEE;
+	width: auto;
+	margin: 0px;
+	padding: 25px 15px 30px 15px;
+}
+
+.column img {
+	margin: 0px 0px 10px 0px;
+}
+
+#footer {
+	display: block;
+	color: #012;
+	font: bold 9px/140% Verdana, Tahoma, Helvetica, sans-serif;
+	width: auto;
+	height: auto;
+	text-align: center;
+	margin: 0px 0px 0px 0px;
+	padding-top: 7px;
+	padding-bottom: 7px;
+	border-top: 1px solid #234;
+	background-color: #A5B3C0;
+}
+
+#footer a {
+	color: #123;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+#footer a:hover {
+	color: #FF0000;
+}
