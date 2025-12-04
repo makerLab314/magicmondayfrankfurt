@@ -1,7 +1,10 @@
 body {
-	margin: 0;
-	background-color: #EEEEEE;
-	background-image: url(images/hintergrund.jpg);
+	margin: 20px;
+	padding: 20px;
+	background-color: #ffffff;
+	font-family: Verdana, Tahoma, Helvetica, sans-serif;
+	font-size: 14px;
+	line-height: 1.5;
 }
 
 p, td {
@@ -10,17 +13,30 @@ p, td {
 	padding: 0px;}
 
 h1 {
-	color: #345;
-	font: bold 15px/140% Verdana, Tahoma, Helvetica, sans-serif;
-	letter-spacing: 1px;
-	margin: 0px 0px 5px 0px;
-	padding: 0px;}
+	color: #333;
+	font-size: 24px;
+	font-weight: bold;
+	margin: 0 0 20px 0;
+	padding: 0;
+}
 
 h2 {
-	color: #345;
-	font: bold 13px/140% Verdana, Tahoma, Helvetica, sans-serif;
-	margin: 0px 0px 5px 0px;
-	padding: 0px;}
+	color: #333;
+	font-size: 18px;
+	font-weight: bold;
+	margin: 20px 0 10px 0;
+	padding: 0;
+}
+
+ul {
+	list-style-type: disc;
+	margin: 10px 0;
+	padding-left: 30px;
+}
+
+ul li {
+	margin: 8px 0;
+}
 
 b {
 	color: #456;}
