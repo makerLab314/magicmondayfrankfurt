@@ -1,0 +1,2 @@
+# magicmondayfrankfurt
+A NEW AND REVOLTUTIONARY VERSION OF THE MAGIC MONDAY SHOW WEBSITE!!!!!!!!!!!!!!!!!
