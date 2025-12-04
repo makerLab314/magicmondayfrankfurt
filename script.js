@@ -1,82 +1,61 @@
-// Magic Monday Frankfurt - Immersive Magic Effects
+// Magic Monday Frankfurt - Clean Modern Interactions
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Magic Monday Frankfurt - Die Magie beginnt! ✨');
+    console.log('Magic Monday Frankfurt - Willkommen!');
     
-    // Smooth fade-in effect for content
-    fadeInContent();
+    // Reveal content on scroll
+    initScrollReveal();
     
-    // Magic sparkle effects on mouse movement
-    initMagicSparkles();
-    
-    // Parallax effect for background
-    initParallax();
+    // Enhanced navigation
+    initNavigation();
 });
 
-// Smooth fade-in for main content
-function fadeInContent() {
-    const columns = document.querySelectorAll('.column');
-    columns.forEach(function(column, index) {
-        column.style.opacity = '0';
-        column.style.transform = 'translateY(20px)';
-        setTimeout(function() {
-            column.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+// Reveal elements as they scroll into view
+function initScrollReveal() {
+    var columns = document.querySelectorAll('.column');
+    
+    if ('IntersectionObserver' in window) {
+        var observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        columns.forEach(function(column) {
+            column.style.opacity = '0';
+            column.style.transform = 'translateY(16px)';
+            column.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+            observer.observe(column);
+        });
+    } else {
+        // Fallback for older browsers
+        columns.forEach(function(column) {
             column.style.opacity = '1';
-            column.style.transform = 'translateY(0)';
-        }, 100 + index * 150);
-    });
+        });
+    }
 }
 
-// Magic sparkle effects
-function initMagicSparkles() {
-    let lastSparkleTime = 0;
-    const sparkleThrottle = 100; // ms between sparkles
+// Navigation enhancement with active state indication
+function initNavigation() {
+    var nav = document.querySelector('#head_navigation');
+    if (!nav) return;
     
-    document.addEventListener('mousemove', function(e) {
-        const now = Date.now();
-        if (now - lastSparkleTime < sparkleThrottle) return;
-        lastSparkleTime = now;
-        
-        // Only create sparkles occasionally (20% chance)
-        if (Math.random() > 0.2) return;
-        
-        createSparkle(e.clientX, e.clientY);
-    });
-}
-
-function createSparkle(x, y) {
-    const sparkle = document.createElement('div');
-    sparkle.className = 'magic-particle';
-    sparkle.innerHTML = '✦';
-    sparkle.style.cssText = 
-        'position: fixed;' +
-        'left: ' + x + 'px;' +
-        'top: ' + y + 'px;' +
-        'pointer-events: none;' +
-        'font-size: ' + (8 + Math.random() * 8) + 'px;' +
-        'color: rgba(212, 175, 55, ' + (0.5 + Math.random() * 0.5) + ');' +
-        'z-index: 9999;' +
-        'animation: sparkleFloat 1s ease-out forwards;';
-    
-    document.body.appendChild(sparkle);
-    
-    // Remove sparkle after animation
-    setTimeout(function() {
-        if (sparkle.parentNode) {
-            sparkle.parentNode.removeChild(sparkle);
-        }
-    }, 1000);
-}
-
-// Parallax effect for background
-function initParallax() {
-    let ticking = false;
+    var lastScrollY = 0;
+    var ticking = false;
     
     window.addEventListener('scroll', function() {
+        lastScrollY = window.scrollY;
+        
         if (!ticking) {
             window.requestAnimationFrame(function() {
-                const scrolled = window.pageYOffset;
-                document.body.style.backgroundPositionY = scrolled * 0.3 + 'px';
+                if (lastScrollY > 50) {
+                    nav.style.boxShadow = '0 2px 8px rgba(0,0,0,0.15)';
+                } else {
+                    nav.style.boxShadow = 'none';
+                }
                 ticking = false;
             });
             ticking = true;
