@@ -1,64 +1,103 @@
-// Magic Monday Frankfurt - Clean Modern Interactions
+// Magic Monday Frankfurt - Dynamic Responsive Effects
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Magic Monday Frankfurt - Willkommen!');
+    console.log('Magic Monday Frankfurt - Willkommen zur Show!');
     
-    // Reveal content on scroll
-    initScrollReveal();
+    // Responsive image handling
+    handleResponsiveImages();
     
-    // Enhanced navigation
-    initNavigation();
+    // Smooth scroll animations
+    initSmoothAnimations();
+    
+    // Dynamic navigation behavior
+    initDynamicNav();
+    
+    // Handle window resize
+    window.addEventListener('resize', debounce(handleResponsiveImages, 250));
 });
 
-// Reveal elements as they scroll into view
-function initScrollReveal() {
-    var columns = document.querySelectorAll('.column');
+// Debounce function for resize events
+function debounce(func, wait) {
+    var timeout;
+    return function() {
+        var context = this, args = arguments;
+        clearTimeout(timeout);
+        timeout = setTimeout(function() {
+            func.apply(context, args);
+        }, wait);
+    };
+}
+
+// Handle responsive images based on screen size
+function handleResponsiveImages() {
+    var images = document.querySelectorAll('.column img, td.column img');
+    var windowWidth = window.innerWidth;
+    
+    images.forEach(function(img) {
+        if (windowWidth < 768) {
+            img.style.cssText = 'width: 100%; max-width: 100%; float: none !important; margin: 0 0 1rem 0 !important; display: block;';
+        } else if (windowWidth < 1200) {
+            if (img.getAttribute('style') && img.getAttribute('style').indexOf('float') !== -1) {
+                img.style.maxWidth = '45%';
+            }
+        } else {
+            if (img.getAttribute('style') && img.getAttribute('style').indexOf('float') !== -1) {
+                img.style.maxWidth = '40%';
+            }
+        }
+    });
+}
+
+// Smooth fade-in animations
+function initSmoothAnimations() {
+    var elements = document.querySelectorAll('.column, article.column, section.column, td.column');
     
     if ('IntersectionObserver' in window) {
         var observer = new IntersectionObserver(function(entries) {
             entries.forEach(function(entry) {
                 if (entry.isIntersecting) {
                     entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
+                    entry.target.style.transform = 'translateX(0)';
+                    observer.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.1 });
+        }, { 
+            threshold: 0.05,
+            rootMargin: '0px 0px -50px 0px'
+        });
         
-        columns.forEach(function(column) {
-            column.style.opacity = '0';
-            column.style.transform = 'translateY(16px)';
-            column.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
-            observer.observe(column);
+        elements.forEach(function(el, index) {
+            el.style.opacity = '0';
+            el.style.transform = 'translateX(-20px)';
+            el.style.transition = 'opacity 0.6s ease ' + (index * 0.1) + 's, transform 0.6s ease ' + (index * 0.1) + 's';
+            observer.observe(el);
         });
     } else {
-        // Fallback for older browsers
-        columns.forEach(function(column) {
-            column.style.opacity = '1';
+        elements.forEach(function(el) {
+            el.style.opacity = '1';
         });
     }
 }
 
-// Navigation enhancement with active state indication
-function initNavigation() {
+// Dynamic navigation with scroll behavior
+function initDynamicNav() {
     var nav = document.querySelector('#head_navigation');
     if (!nav) return;
     
-    var lastScrollY = 0;
-    var ticking = false;
+    var lastScroll = 0;
+    var scrollThreshold = 100;
     
     window.addEventListener('scroll', function() {
-        lastScrollY = window.scrollY;
+        var currentScroll = window.pageYOffset;
         
-        if (!ticking) {
-            window.requestAnimationFrame(function() {
-                if (lastScrollY > 50) {
-                    nav.style.boxShadow = '0 2px 8px rgba(0,0,0,0.15)';
-                } else {
-                    nav.style.boxShadow = 'none';
-                }
-                ticking = false;
-            });
-            ticking = true;
+        if (currentScroll > scrollThreshold) {
+            nav.style.background = 'rgba(15, 52, 96, 0.98)';
+            nav.style.boxShadow = '0 4px 20px rgba(233, 69, 96, 0.3)';
+        } else {
+            nav.style.background = 'rgba(15, 52, 96, 0.95)';
+            nav.style.boxShadow = 'none';
         }
+        
+        lastScroll = currentScroll;
     });
 }
