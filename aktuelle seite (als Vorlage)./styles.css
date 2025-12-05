@@ -1,111 +1,157 @@
-/* Base Styles */
 body {
-    margin: 0;
-    padding: 0;
-    background-color: #ffffff;
-    font-family: Verdana, Tahoma, Helvetica, sans-serif;
-    font-size: 14px;
-    line-height: 1.6;
-    color: #333;
+	margin: 0;
+	background-color: #ffffff;
 }
 
-/* Container */
-.container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-/* Header */
-header {
-    text-align: center;
-    margin-bottom: 0;
-}
-
-.header-image {
-    max-width: 100%;
-    height: auto;
-    display: block;
-    margin: 0 auto;
-}
-
-/* Navigation */
-.navigation {
-    background-color: #3a5a80;
-    padding: 12px 0;
-    text-align: center;
-    margin-bottom: 25px;
-    border-radius: 4px;
-}
-
-.nav-link {
-    color: #ffffff;
-    text-decoration: none;
-    padding: 8px 15px;
-    margin: 0 5px;
-    font-size: 13px;
-    font-weight: bold;
-    text-transform: uppercase;
-    transition: background-color 0.3s;
-}
-
-.nav-link:hover {
-    background-color: #2a4a70;
-    border-radius: 3px;
-}
-
-.nav-link.active {
-    background-color: #1a3a60;
-    border-radius: 3px;
-}
-
-/* Content */
-.content {
-    background-color: #f5f5f5;
-    padding: 25px;
-    border-radius: 5px;
-    margin-bottom: 25px;
-}
-
-.content-image {
-    float: right;
-    margin: 0 0 15px 20px;
-    max-width: 300px;
-    border-radius: 5px;
-}
+p, td {
+	font: normal 14px/160% Verdana, Tahoma, Helvetica, sans-serif;
+	margin: 0px 0px 10px 0px;
+	padding: 0px;}
 
 h1 {
-    color: #345;
-    font-size: 22px;
-    margin-bottom: 15px;
-}
+	color: #2c3e50;
+	font: bold 22px/140% Verdana, Tahoma, Helvetica, sans-serif;
+	letter-spacing: 1px;
+	margin: 0px 0px 15px 0px;
+	padding: 0px;}
 
 h2 {
-    color: #345;
-    font-size: 16px;
-    margin-top: 20px;
-    clear: both;
+	color: #2c3e50;
+	font: bold 18px/140% Verdana, Tahoma, Helvetica, sans-serif;
+	margin: 15px 0px 10px 0px;
+	padding: 0px;}
+
+b {
+	color: #456;}
+
+a {
+	color: #3498db;
+	font-weight: bold;
+	text-decoration: none;
 }
 
-p {
-    margin-bottom: 15px;
+a:hover {
+	color: #e74c3c;
+	text-decoration: underline;
 }
 
-/* Footer */
-footer {
-    text-align: center;
-    padding: 15px;
-    background-color: #3a5a80;
-    border-radius: 4px;
-    font-size: 12px;
+#head {
+	width: 750px;
+	height: 100px;
+	margin: 15px 0px 0px 0px;
+	padding: 0px;
+	border: none;}
+
+.clear {
+	clear: both;}
+
+.clear_line {
+	clear: both;
+	display: block;
+	margin: 4px 0 5px 0;
+	border-top: 1px solid #999;}
+
+#head_navigation {
+	display: block;
+	color: #fff;
+	width: auto;
+	height: auto;
+	text-align: center;
+	margin: 0px 0px 0px 0px;
+	padding-top: 12px;
+	padding-bottom: 12px;
+	border-bottom: none;
+	background-color: #34495e;
 }
 
-footer a {
-    color: #ffffff;
-    text-decoration: none;
-    margin: 0 10px;
+#head_navigation a {
+	color: #ecf0f1;
+	font: bold 12px/100% Verdana, Tahoma, Helvetica, sans-serif;
+	text-transform: uppercase;
+	text-decoration: none;
+	padding: 8px 12px;
+	transition: background-color 0.3s;
 }
 
-footer a:hover {
-    text-decoration: underline;
+#head_navigation a:hover {
+	color: #ffffff;
+	background-color: #2c3e50;
+	border-radius: 3px;
+}
+
+#head_navigation .off {
+	color: #3498db;
+	font: bold 12px/100% Verdana, Tahoma, Helvetica, sans-serif;
+	text-transform: uppercase;
+	padding: 8px 12px;
+}
+
+.column {
+	color: #333;
+	background: #ffffff;
+	width: auto;
+	margin: 0px;
+	padding: 30px 20px 35px 20px;
+}
+
+form {
+	color: #0A3;
+	background: #EEE;
+	margin: 0px 0px 0px 0px;}
+	
+.column input {
+	width: 200px;
+	margin: 3px 0px 12px 0px;
+	padding: 2px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+	color: #475B74;
+	background-color: #C0CAD3;
+}
+
+.column textarea {
+	width: 300px;
+	margin: 3px 0px 5px 0px;
+	padding: 2px;
+	height: 140px;
+	background-color: #C0CAD3;
+}
+
+.column img {
+	margin: 0px 0px 10px 0px;}
+
+.bildbox {
+	display: inline;
+	float: left;
+	color: #333;
+	font: normal 10px/110% Verdana, Tahoma, Helvetica, sans-serif;
+	width: 150px;
+	height: auto;
+	margin: 0px 15px 5px 0px;}
+
+.bildbox img {
+	margin: 5px 0px 3px 0px;}
+
+#footer {
+	display: block;
+	color: #ecf0f1;
+	font: bold 11px/140% Verdana, Tahoma, Helvetica, sans-serif;
+	width: auto;
+	height: auto;
+	text-align: center;
+	margin: 0px 0px 0px 0px;
+	padding-top: 15px;
+	border-top: none;
+	background-color: #34495e;
+	padding-bottom: 15px;
+}
+
+#footer a {
+	color: #ecf0f1;
+	font-weight: bold;
+	text-decoration: none;}
+
+#footer a:hover {
+	color: #3498db;
 }
