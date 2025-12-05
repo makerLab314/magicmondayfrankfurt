@@ -8,23 +8,25 @@ body {
 p, td {
 	font: normal 14px/160% Verdana, Tahoma, Helvetica, sans-serif;
 	margin: 0px 0px 10px 0px;
-	padding: 0px;}
+	padding: 0px;
+}
 
 h1 {
 	color: #2c3e50;
 	font: bold 28px/140% Verdana, Tahoma, Helvetica, sans-serif;
 	letter-spacing: 1px;
 	margin: 0px 0px 20px 0px;
-	padding: 0px;}
+	padding: 0px;
+}
 
 h2 {
 	color: #2c3e50;
 	font: bold 20px/140% Verdana, Tahoma, Helvetica, sans-serif;
 	margin: 20px 0px 15px 0px;
-	padding: 0px;}
+	padding: 0px;
+}
 
-b {
-	color: #456;}
+b { color: #456; }
 
 a {
 	color: #3498db;
@@ -54,15 +56,6 @@ a:hover {
 	height: auto;
 	display: block;
 }
-
-.clear {
-	clear: both;}
-
-.clear_line {
-	clear: both;
-	display: block;
-	margin: 4px 0 5px 0;
-	border-top: 1px solid #ddd;}
 
 #head_navigation {
 	display: block;
@@ -116,55 +109,10 @@ a:hover {
 	border-radius: 8px;
 }
 
-form {
-	color: #0A3;
-	background: #ffffff;
-	margin: 0px 0px 0px 0px;}
-	
-.column input {
-	width: 100%;
-	max-width: 300px;
-	margin: 3px 0px 12px 0px;
-	padding: 10px;
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 14px;
-	color: #333;
-	background-color: #f5f5f5;
-	border: 1px solid #ddd;
-	border-radius: 5px;
-	box-sizing: border-box;
-}
-
-.column textarea {
-	width: 100%;
-	max-width: 400px;
-	margin: 3px 0px 5px 0px;
-	padding: 10px;
-	height: 150px;
-	background-color: #f5f5f5;
-	border: 1px solid #ddd;
-	border-radius: 5px;
-	box-sizing: border-box;
-}
-
 .column img {
 	margin: 0px 0px 15px 15px;
 	border-radius: 8px;
 	box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-
-.bildbox {
-	display: inline;
-	float: left;
-	color: #333;
-	font: normal 12px/130% Verdana, Tahoma, Helvetica, sans-serif;
-	width: 150px;
-	height: auto;
-	margin: 0px 15px 10px 0px;}
-
-.bildbox img {
-	margin: 5px 0px 5px 0px;
-	border-radius: 5px;
 }
 
 #footer {
@@ -192,7 +140,6 @@ form {
 	text-decoration: underline;
 }
 
-/* Remove table constraints for full width */
 table {
 	width: 100% !important;
 	max-width: 100% !important;
