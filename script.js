@@ -83,7 +83,7 @@ function initEasterEgg() {
     overlay.innerHTML = `
         <div class="mini-game-container">
             <div class="mini-game-title">🎩 Hütchenspiel 🐰</div>
-            <p style="font-family: 'Inter', sans-serif; font-size: 1rem; color: var(--color-text-muted); margin-bottom: 0.5rem;">
+            <p class="game-instructions">
                 Finde den Hasen! Klicke auf einen Hut.
             </p>
             <div class="cups-container">
@@ -91,7 +91,7 @@ function initEasterEgg() {
                 <div class="cup" data-cup="2"><span class="rabbit">🐰</span></div>
                 <div class="cup" data-cup="3"><span class="rabbit">🐰</span></div>
             </div>
-            <p class="game-result" style="font-family: 'Playfair Display', serif; font-size: 1.125rem; color: var(--color-gold); min-height: 1.5rem;"></p>
+            <p class="game-result"></p>
             <button class="close-game">Schließen</button>
         </div>
     `;
@@ -202,8 +202,11 @@ function playGame(selectedCup) {
     setTimeout(function() {
         if (selectedCup.dataset.hasRabbit === 'true') {
             selectedCup.classList.add('reveal');
-            result.textContent = '🎉 Gewonnen! Du hast den Hasen gefunden!';
-            result.style.color = 'var(--color-gold)';
+            if (result) {
+                result.textContent = '🎉 Gewonnen! Du hast den Hasen gefunden!';
+                result.classList.remove('game-result-lose');
+                result.classList.add('game-result-win');
+            }
         } else {
             // Show where rabbit actually was
             cups.forEach(function(cup) {
@@ -211,8 +214,11 @@ function playGame(selectedCup) {
                     cup.classList.add('lifted', 'reveal');
                 }
             });
-            result.textContent = '😅 Der Hase war woanders!';
-            result.style.color = 'var(--color-bordeaux-light)';
+            if (result) {
+                result.textContent = '😅 Der Hase war woanders!';
+                result.classList.remove('game-result-win');
+                result.classList.add('game-result-lose');
+            }
         }
         
         // Reset after delay

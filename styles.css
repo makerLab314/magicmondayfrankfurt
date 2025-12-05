@@ -43,6 +43,9 @@
 	--transition-fast: all 0.2s ease;
 	--transition-smooth: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
 	--transition-elegant: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+	
+	/* Layout dimensions */
+	--error-page-min-height: 80vh;
 }
 
 /* ===== FONT IMPORTS ===== */
@@ -813,9 +816,33 @@ header {
 	border-color: var(--color-gold);
 }
 
+/* Game instructions and result styling */
+.game-instructions {
+	font-family: 'Inter', sans-serif;
+	font-size: 1rem;
+	color: var(--color-text-muted);
+	margin-bottom: 0.5rem;
+}
+
+.game-result {
+	font-family: 'Playfair Display', serif;
+	font-size: 1.125rem;
+	color: var(--color-gold);
+	min-height: 1.5rem;
+	transition: color 0.3s ease;
+}
+
+.game-result-win {
+	color: var(--color-gold);
+}
+
+.game-result-lose {
+	color: var(--color-bordeaux-light);
+}
+
 /* ===== ELEGANT 404 PAGE STYLES ===== */
 .error-page {
-	min-height: 80vh;
+	min-height: var(--error-page-min-height);
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
