@@ -1,22 +1,22 @@
-// Magic Monday Frankfurt - Dynamic Responsive Effects
+// Magic Monday Frankfurt - Monochrome Glass Effects
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Magic Monday Frankfurt - Willkommen zur Show!');
+    console.log('Magic Monday Frankfurt - Willkommen!');
     
     // Responsive image handling
     handleResponsiveImages();
     
-    // Smooth scroll animations
-    initSmoothAnimations();
+    // Smooth fade animations
+    initFadeAnimations();
     
-    // Dynamic navigation behavior
-    initDynamicNav();
+    // Navigation scroll effects
+    initNavScroll();
     
     // Handle window resize
-    window.addEventListener('resize', debounce(handleResponsiveImages, 250));
+    window.addEventListener('resize', debounce(handleResponsiveImages, 200));
 });
 
-// Debounce function for resize events
+// Debounce utility
 function debounce(func, wait) {
     var timeout;
     return function() {
@@ -28,7 +28,7 @@ function debounce(func, wait) {
     };
 }
 
-// Handle responsive images based on screen size
+// Responsive image handling
 function handleResponsiveImages() {
     var images = document.querySelectorAll('.column img, td.column img');
     var windowWidth = window.innerWidth;
@@ -38,29 +38,26 @@ function handleResponsiveImages() {
             img.style.width = '100%';
             img.style.maxWidth = '100%';
             img.style.float = 'none';
-            img.style.margin = '0 0 1rem 0';
+            img.style.margin = '0 0 1.25rem 0';
             img.style.display = 'block';
         } else if (windowWidth < 1200) {
             if (img.getAttribute('style') && img.getAttribute('style').indexOf('float') !== -1) {
-                img.style.maxWidth = '45%';
+                img.style.maxWidth = '42%';
             }
         } else {
             if (img.getAttribute('style') && img.getAttribute('style').indexOf('float') !== -1) {
-                img.style.maxWidth = '40%';
+                img.style.maxWidth = '38%';
             }
         }
     });
 }
 
-// Smooth fade-in animations
-function initSmoothAnimations() {
-    // Check for reduced motion preference
+// Fade-in animations
+function initFadeAnimations() {
     var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    
     var elements = document.querySelectorAll('.column, article.column, section.column, td.column');
     
     if (prefersReducedMotion) {
-        // Skip animations for users who prefer reduced motion
         elements.forEach(function(el) {
             el.style.opacity = '1';
         });
@@ -72,19 +69,19 @@ function initSmoothAnimations() {
             entries.forEach(function(entry) {
                 if (entry.isIntersecting) {
                     entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateX(0)';
+                    entry.target.style.transform = 'translateY(0)';
                     observer.unobserve(entry.target);
                 }
             });
         }, { 
-            threshold: 0.05,
-            rootMargin: '0px 0px -50px 0px'
+            threshold: 0.08,
+            rootMargin: '0px 0px -30px 0px'
         });
         
         elements.forEach(function(el, index) {
             el.style.opacity = '0';
-            el.style.transform = 'translateX(-20px)';
-            el.style.transition = 'opacity 0.6s ease ' + (index * 0.1) + 's, transform 0.6s ease ' + (index * 0.1) + 's';
+            el.style.transform = 'translateY(15px)';
+            el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
             observer.observe(el);
         });
     } else {
@@ -94,25 +91,22 @@ function initSmoothAnimations() {
     }
 }
 
-// Dynamic navigation with scroll behavior
-function initDynamicNav() {
+// Navigation scroll effect - monochrome only
+function initNavScroll() {
     var nav = document.querySelector('#head_navigation');
     if (!nav) return;
     
-    var lastScroll = 0;
-    var scrollThreshold = 100;
+    var scrollThreshold = 80;
     
     window.addEventListener('scroll', function() {
         var currentScroll = window.pageYOffset;
         
         if (currentScroll > scrollThreshold) {
-            nav.style.background = 'rgba(15, 52, 96, 0.98)';
-            nav.style.boxShadow = '0 4px 20px rgba(233, 69, 96, 0.3)';
+            nav.style.background = 'rgba(0, 0, 0, 0.9)';
+            nav.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.6)';
         } else {
-            nav.style.background = 'rgba(15, 52, 96, 0.95)';
-            nav.style.boxShadow = 'none';
+            nav.style.background = 'rgba(0, 0, 0, 0.7)';
+            nav.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.5)';
         }
-        
-        lastScroll = currentScroll;
     });
 }
