@@ -32,6 +32,15 @@
 	--shadow-red: 0 0 10px rgba(196, 30, 58, 0.3);
 	--shadow-deep: 0 8px 32px rgba(0, 0, 0, 0.6);
 	
+	/* Opacity levels for effects */
+	--opacity-subtle: 0.03;
+	--opacity-low: 0.1;
+	--opacity-medium: 0.3;
+	--opacity-high: 0.6;
+	
+	/* Clip-path for 5-pointed star shape */
+	--star-clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+	
 	/* Transitions */
 	--transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 	--transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
@@ -172,7 +181,7 @@ body.loaded .container {
 }
 
 .cursor-spark.star {
-	clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+	clip-path: var(--star-clip-path);
 	width: 12px;
 	height: 12px;
 }
@@ -463,7 +472,7 @@ body.loaded .container {
 	pointer-events: none;
 	z-index: 99988;
 	mix-blend-mode: screen;
-	opacity: 0.03;
+	opacity: var(--opacity-subtle);
 }
 
 .crt-aberration::before {
@@ -1853,7 +1862,7 @@ td.column {
 	width: 10px;
 	height: 10px;
 	background: var(--color-gold);
-	clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+	clip-path: var(--star-clip-path);
 	box-shadow: 0 0 6px var(--color-gold);
 }
 
