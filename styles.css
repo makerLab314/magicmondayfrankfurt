@@ -48,6 +48,10 @@ body {
 	color: var(--color-text);
 	min-height: 100vh;
 	overflow-x: hidden;
+}
+
+/* Hide cursor only when custom cursor is active (loaded state) */
+body.loaded {
 	cursor: none;
 }
 
@@ -729,20 +733,28 @@ header {
 	font-size: 20px;
 }
 
-/* Facebook button pixel style */
-.contact-card a[style*="background-color: #0066cc"] {
-	background: linear-gradient(180deg, var(--color-gold) 0%, var(--color-gold-dark) 100%) !important;
-	color: var(--color-bg-dark) !important;
-	font-family: 'Press Start 2P', cursive !important;
-	font-size: 10px !important;
-	border: 3px solid var(--color-red) !important;
-	border-radius: 0 !important;
-	padding: 15px 25px !important;
+/* Social button pixel style */
+.social-btn {
+	display: inline-block;
+	background: linear-gradient(180deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
+	color: var(--color-bg-dark);
+	font-family: 'Press Start 2P', cursive;
+	font-size: 10px;
+	border: 3px solid var(--color-red);
+	border-radius: 0;
+	padding: 15px 25px;
+	text-decoration: none;
+	transition: var(--transition-smooth);
 }
 
-.contact-card a[style*="background-color: #0066cc"]:hover {
-	background: linear-gradient(180deg, #fff 0%, var(--color-gold) 100%) !important;
+.social-btn:hover {
+	background: linear-gradient(180deg, #fff 0%, var(--color-gold) 100%);
 	box-shadow: 0 0 20px var(--color-gold);
+	color: var(--color-bg-dark);
+}
+
+.social-btn::after {
+	display: none;
 }
 
 /* ===== MINI-GAME OVERLAY ===== */

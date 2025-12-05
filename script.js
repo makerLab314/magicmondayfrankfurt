@@ -1,6 +1,13 @@
 // Magic Monday Frankfurt - Pixel Art Retro Theme
 // Features: Preloader, Custom Cursor, Particles, Easter Egg Mini-Game
 
+// Configuration constants
+const CONFIG = {
+    PRELOADER_MIN_TIME: 1200, // Minimum preloader display time in ms
+    CURSOR_EASING: 0.15, // Cursor follow smoothness (0-1, lower = smoother)
+    TRAIL_THROTTLE: 3 // Create trail every N mouse moves
+};
+
 document.addEventListener('DOMContentLoaded', function() {
     initPreloader();
     initCustomCursor();
@@ -25,13 +32,12 @@ function initPreloader() {
     document.body.insertBefore(preloader, document.body.firstChild);
     document.body.classList.add('loading');
     
-    // Hide preloader after animation
-    const minLoadTime = 2000; // Minimum display time for effect
+    // Hide preloader after animation completes
     const startTime = Date.now();
     
     window.addEventListener('load', function() {
         const elapsed = Date.now() - startTime;
-        const remaining = Math.max(0, minLoadTime - elapsed);
+        const remaining = Math.max(0, CONFIG.PRELOADER_MIN_TIME - elapsed);
         
         setTimeout(function() {
             preloader.classList.add('hidden');
@@ -85,8 +91,8 @@ function initCustomCursor() {
         const dx = mouseX - cursorX;
         const dy = mouseY - cursorY;
         
-        cursorX += dx * 0.15;
-        cursorY += dy * 0.15;
+        cursorX += dx * CONFIG.CURSOR_EASING;
+        cursorY += dy * CONFIG.CURSOR_EASING;
         
         cursor.style.left = cursorX + 'px';
         cursor.style.top = cursorY + 'px';
@@ -118,7 +124,7 @@ function initCustomCursor() {
     let trailThrottle = 0;
     document.addEventListener('mousemove', function(e) {
         trailThrottle++;
-        if (trailThrottle % 3 === 0) {
+        if (trailThrottle % CONFIG.TRAIL_THROTTLE === 0) {
             createMagicTrail(e.clientX, e.clientY);
         }
     });
