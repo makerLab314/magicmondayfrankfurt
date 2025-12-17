@@ -4,13 +4,22 @@
 // Configuration constants
 const CONFIG = {
     STAR_COUNT: 40, // Number of stars in background (subtle)
+    PARTICLE_COUNT: 20, // Floating magic particles
+    CUP_GAME_AREA: {
+        TOP_PERCENTAGE: 0.6,
+        LEFT_PERCENTAGE: 0.3,
+        RIGHT_PERCENTAGE: 0.7
+    }
 };
 
 document.addEventListener('DOMContentLoaded', function() {
     initStarfield();
+    initParticles();
     initPreloader();
     initEasterEgg();
     initFooterGameButton();
+    initMascot();
+    initNewEasterEggs();
 });
 
 // ===== ELEGANT STARFIELD =====
@@ -224,6 +233,466 @@ function playGame(selectedCup) {
         // Reset after delay
         setTimeout(resetGame, 2500);
     }, 500);
+}
+
+// ===== MAGICAL PARTICLE EFFECTS =====
+function initParticles() {
+    const particleContainer = document.createElement('div');
+    particleContainer.id = 'particle-container';
+    document.body.appendChild(particleContainer);
+    
+    // Create floating particles
+    for (let i = 0; i < CONFIG.PARTICLE_COUNT; i++) {
+        createParticle(particleContainer);
+    }
+    
+    // Create occasional sparks
+    setInterval(function() {
+        createSpark(particleContainer);
+    }, 2000);
+}
+
+function createParticle(container) {
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+    
+    // Random horizontal position
+    particle.style.left = Math.random() * 100 + '%';
+    particle.style.bottom = '-20px';
+    
+    // Random animation duration (6-12 seconds)
+    const duration = 6 + Math.random() * 6;
+    particle.style.setProperty('--float-duration', duration + 's');
+    
+    // Random horizontal drift (-50px to 50px)
+    const drift = (Math.random() - 0.5) * 100;
+    particle.style.setProperty('--drift-x', drift + 'px');
+    
+    // Random delay
+    particle.style.animationDelay = Math.random() * 5 + 's';
+    
+    container.appendChild(particle);
+    
+    // Remove and recreate after animation
+    setTimeout(function() {
+        particle.remove();
+        createParticle(container);
+    }, (duration + 5) * 1000);
+}
+
+function createSpark(container) {
+    const spark = document.createElement('div');
+    spark.className = 'spark';
+    
+    // Random position
+    spark.style.left = Math.random() * 100 + '%';
+    spark.style.top = Math.random() * 100 + '%';
+    
+    // Random animation duration
+    const duration = 1 + Math.random() * 2;
+    spark.style.setProperty('--sparkle-duration', duration + 's');
+    
+    container.appendChild(spark);
+    
+    // Remove after animation
+    setTimeout(function() {
+        spark.remove();
+    }, duration * 1000);
+}
+
+// ===== ANIMATED MASCOT - TOP HAT WITH EYES =====
+let jokeIndex = 0;
+const jokes = [
+    "Willkommen zur Magic Monday Show! ✨",
+    "Heute ist ein magischer Tag! 🎩",
+    "Klick auf mich für mehr Magie! 🌟",
+    "Abrakadabra! Simsalabim! 🪄",
+    "Die beste Zaubershow in Frankfurt! 🎭",
+    "Entdecke versteckte Easter Eggs! 🥚",
+    "Halte Ausschau nach Geheimnissen... 👀",
+    "Magische Momente warten auf dich! ✨"
+];
+
+function initMascot() {
+    const mascotContainer = document.createElement('div');
+    mascotContainer.id = 'mascot-container';
+    mascotContainer.innerHTML = `
+        <div class="mascot">
+            <div class="top-hat">
+                <div class="hat-band"></div>
+            </div>
+            <div class="eyes-container">
+                <div class="eye">
+                    <div class="pupil"></div>
+                </div>
+                <div class="eye">
+                    <div class="pupil"></div>
+                </div>
+            </div>
+            <div class="magic-wand"></div>
+            <div class="speech-bubble">
+                <button class="close-bubble">×</button>
+                <p class="bubble-text"></p>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(mascotContainer);
+    
+    const mascot = mascotContainer.querySelector('.mascot');
+    const eyes = mascotContainer.querySelectorAll('.eye');
+    const pupils = mascotContainer.querySelectorAll('.pupil');
+    const eyesContainer = mascotContainer.querySelector('.eyes-container');
+    const speechBubble = mascotContainer.querySelector('.speech-bubble');
+    const bubbleText = mascotContainer.querySelector('.bubble-text');
+    const closeBubble = mascotContainer.querySelector('.close-bubble');
+    
+    // Eye tracking
+    document.addEventListener('mousemove', function(e) {
+        const mascotRect = mascot.getBoundingClientRect();
+        const mascotCenterX = mascotRect.left + mascotRect.width / 2;
+        const mascotCenterY = mascotRect.top + mascotRect.height / 2;
+        
+        const angle = Math.atan2(e.clientY - mascotCenterY, e.clientX - mascotCenterX);
+        const distance = Math.min(4, Math.hypot(e.clientX - mascotCenterX, e.clientY - mascotCenterY) / 100);
+        
+        pupils.forEach(function(pupil) {
+            const offsetX = Math.cos(angle) * distance;
+            const offsetY = Math.sin(angle) * distance;
+            pupil.style.transform = `translate(calc(-50% + ${offsetX}px), calc(-50% + ${offsetY}px))`;
+        });
+        
+        // Slight head tilt
+        const tiltX = (e.clientY - mascotCenterY) / 100;
+        const tiltY = -(e.clientX - mascotCenterX) / 100;
+        eyesContainer.style.transform = `translateX(-50%) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+    });
+    
+    // Blinking animation
+    setInterval(function() {
+        eyes.forEach(function(eye) {
+            eye.classList.add('blinking');
+        });
+        setTimeout(function() {
+            eyes.forEach(function(eye) {
+                eye.classList.remove('blinking');
+            });
+        }, 300);
+    }, 4000);
+    
+    // Show speech bubble on click
+    mascot.addEventListener('click', function() {
+        bubbleText.textContent = jokes[jokeIndex];
+        jokeIndex = (jokeIndex + 1) % jokes.length;
+        speechBubble.classList.add('visible');
+        
+        // Auto-hide after 5 seconds
+        setTimeout(function() {
+            speechBubble.classList.remove('visible');
+        }, 5000);
+    });
+    
+    closeBubble.addEventListener('click', function(e) {
+        e.stopPropagation();
+        speechBubble.classList.remove('visible');
+    });
+    
+    // Show initial message after delay
+    setTimeout(function() {
+        bubbleText.textContent = jokes[0];
+        jokeIndex = 1;
+        speechBubble.classList.add('visible');
+        
+        setTimeout(function() {
+            speechBubble.classList.remove('visible');
+        }, 5000);
+    }, 3000);
+    
+    // Periodic random messages
+    setInterval(function() {
+        if (!speechBubble.classList.contains('visible')) {
+            bubbleText.textContent = jokes[jokeIndex];
+            jokeIndex = (jokeIndex + 1) % jokes.length;
+            speechBubble.classList.add('visible');
+            
+            setTimeout(function() {
+                speechBubble.classList.remove('visible');
+            }, 5000);
+        }
+    }, 30000); // Every 30 seconds
+}
+
+// ===== NEW EASTER EGGS - SLIDE FROM LEFT =====
+function initNewEasterEggs() {
+    // Easter Egg #2: Magic Spell Effect (type "abracadabra")
+    initSpellEasterEgg();
+    
+    // Easter Egg #3: Disappearing Elements (click logo 5 times quickly)
+    initDisappearingEasterEgg();
+    
+    // Easter Egg #4: Particle Burst (press Shift+M)
+    initParticleBurstEasterEgg();
+}
+
+// Easter Egg #2: Magic Spell
+let spellBuffer = '';
+let spellTimeout = null;
+
+function initSpellEasterEgg() {
+    document.addEventListener('keypress', function(e) {
+        clearTimeout(spellTimeout);
+        spellBuffer += e.key.toLowerCase();
+        
+        if (spellBuffer.length > 15) {
+            spellBuffer = spellBuffer.substring(spellBuffer.length - 15);
+        }
+        
+        if (spellBuffer.includes('abracadabra')) {
+            showSpellEasterEgg();
+            spellBuffer = '';
+        }
+        
+        spellTimeout = setTimeout(function() {
+            spellBuffer = '';
+        }, 2000);
+    });
+}
+
+function showSpellEasterEgg() {
+    const panel = document.createElement('div');
+    panel.className = 'easter-egg-panel active';
+    panel.innerHTML = `
+        <button class="easter-egg-close">✕ Schließen</button>
+        <div class="easter-egg-content">
+            <h2 class="easter-egg-title">🪄 ZAUBERSPRUCH AKTIVIERT! 🪄</h2>
+            <p style="font-size: 1.2rem; margin: 2rem 0; font-family: 'Exo 2', sans-serif; font-weight: 700;">
+                Du hast das magische Wort gesprochen!<br>
+                <span style="color: var(--color-gold); font-size: 1.5rem;">ABRACADABRA!</span>
+            </p>
+            <div id="spell-particles" style="position: relative; height: 200px;"></div>
+        </div>
+    `;
+    document.body.appendChild(panel);
+    
+    // Create burst of particles
+    const particleContainer = panel.querySelector('#spell-particles');
+    for (let i = 0; i < 50; i++) {
+        const particle = document.createElement('div');
+        particle.style.position = 'absolute';
+        particle.style.left = '50%';
+        particle.style.top = '50%';
+        particle.style.width = '8px';
+        particle.style.height = '8px';
+        particle.style.background = 'var(--color-gold)';
+        particle.style.borderRadius = '50%';
+        particle.style.boxShadow = '0 0 10px rgba(255, 215, 0, 1)';
+        
+        const angle = (Math.PI * 2 * i) / 50;
+        const velocity = 50 + Math.random() * 100;
+        const duration = 1 + Math.random();
+        
+        particle.animate([
+            { transform: 'translate(-50%, -50%) scale(1)', opacity: 1 },
+            { 
+                transform: `translate(calc(-50% + ${Math.cos(angle) * velocity}px), calc(-50% + ${Math.sin(angle) * velocity}px)) scale(0)`,
+                opacity: 0 
+            }
+        ], {
+            duration: duration * 1000,
+            easing: 'ease-out'
+        });
+        
+        particleContainer.appendChild(particle);
+    }
+    
+    panel.querySelector('.easter-egg-close').addEventListener('click', function() {
+        panel.classList.remove('active');
+        setTimeout(function() { panel.remove(); }, 600);
+    });
+}
+
+// Easter Egg #3: Disappearing Elements
+let logoClickCount = 0;
+let logoClickTimeout = null;
+
+function initDisappearingEasterEgg() {
+    const logo = document.querySelector('#head img');
+    if (!logo) return;
+    
+    logo.addEventListener('click', function(e) {
+        // Skip if it's the cup game trigger area
+        const rect = logo.getBoundingClientRect();
+        const clickY = e.clientY - rect.top;
+        const clickX = e.clientX - rect.left;
+        
+        if (clickY < rect.height * CONFIG.CUP_GAME_AREA.TOP_PERCENTAGE && 
+            clickX > rect.width * CONFIG.CUP_GAME_AREA.LEFT_PERCENTAGE && 
+            clickX < rect.width * CONFIG.CUP_GAME_AREA.RIGHT_PERCENTAGE) {
+            return; // This is the cup game area
+        }
+        
+        clearTimeout(logoClickTimeout);
+        logoClickCount++;
+        
+        if (logoClickCount >= 5) {
+            showDisappearingEasterEgg();
+            logoClickCount = 0;
+        }
+        
+        logoClickTimeout = setTimeout(function() {
+            logoClickCount = 0;
+        }, 2000);
+    });
+}
+
+function showDisappearingEasterEgg() {
+    const panel = document.createElement('div');
+    panel.className = 'easter-egg-panel active';
+    panel.innerHTML = `
+        <button class="easter-egg-close">✕ Schließen</button>
+        <div class="easter-egg-content">
+            <h2 class="easter-egg-title">👻 VERSCHWINDIBUS! 👻</h2>
+            <p style="font-size: 1.2rem; margin: 2rem 0; font-family: 'Exo 2', sans-serif; font-weight: 700;">
+                Lass etwas verschwinden!
+            </p>
+            <div style="display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; margin: 2rem 0;">
+                <button class="vanish-btn" data-target="h1">Überschrift</button>
+                <button class="vanish-btn" data-target="img">Bilder</button>
+                <button class="vanish-btn" data-target="p">Text</button>
+                <button class="vanish-btn" data-target=".star">Sterne</button>
+            </div>
+            <button class="restore-btn" style="margin-top: 1rem;">🔄 Alles zurück</button>
+        </div>
+    `;
+    document.body.appendChild(panel);
+    
+    const vanishedElements = [];
+    
+    panel.querySelectorAll('.vanish-btn').forEach(function(btn) {
+        btn.style.cssText = 'font-family: "Exo 2", sans-serif; font-size: 1rem; font-weight: 700; padding: 1rem 2rem; background: var(--color-bordeaux); color: white; border: 2px solid var(--color-gold); border-radius: 8px; cursor: pointer; transition: var(--transition-smooth);';
+        
+        btn.addEventListener('click', function() {
+            const target = this.getAttribute('data-target');
+            const elements = document.querySelectorAll(target);
+            
+            elements.forEach(function(el) {
+                if (el.style.opacity !== '0') {
+                    vanishedElements.push({ element: el, originalOpacity: el.style.opacity || '1' });
+                    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    el.style.opacity = '0';
+                    el.style.transform = 'scale(0) rotate(360deg)';
+                }
+            });
+        });
+        
+        btn.addEventListener('mouseenter', function() {
+            this.style.background = 'var(--color-gold)';
+            this.style.color = 'var(--color-bg-dark)';
+            this.style.transform = 'scale(1.05)';
+        });
+        
+        btn.addEventListener('mouseleave', function() {
+            this.style.background = 'var(--color-bordeaux)';
+            this.style.color = 'white';
+            this.style.transform = 'scale(1)';
+        });
+    });
+    
+    const restoreBtn = panel.querySelector('.restore-btn');
+    restoreBtn.style.cssText = 'font-family: "Exo 2", sans-serif; font-size: 1rem; font-weight: 700; padding: 1rem 2rem; background: var(--color-gold); color: var(--color-bg-dark); border: 2px solid var(--color-gold); border-radius: 8px; cursor: pointer; transition: var(--transition-smooth);';
+    
+    restoreBtn.addEventListener('click', function() {
+        vanishedElements.forEach(function(item) {
+            item.element.style.opacity = item.originalOpacity;
+            item.element.style.transform = 'scale(1) rotate(0deg)';
+        });
+        vanishedElements.length = 0;
+    });
+    
+    panel.querySelector('.easter-egg-close').addEventListener('click', function() {
+        // Restore all before closing
+        vanishedElements.forEach(function(item) {
+            item.element.style.opacity = item.originalOpacity;
+            item.element.style.transform = 'scale(1) rotate(0deg)';
+        });
+        
+        panel.classList.remove('active');
+        setTimeout(function() { panel.remove(); }, 600);
+    });
+}
+
+// Easter Egg #4: Particle Burst
+function initParticleBurstEasterEgg() {
+    document.addEventListener('keydown', function(e) {
+        if (e.shiftKey && e.key.toLowerCase() === 'm') {
+            showParticleBurstEasterEgg();
+        }
+    });
+}
+
+function showParticleBurstEasterEgg() {
+    const panel = document.createElement('div');
+    panel.className = 'easter-egg-panel active';
+    panel.innerHTML = `
+        <button class="easter-egg-close">✕ Schließen</button>
+        <div class="easter-egg-content">
+            <h2 class="easter-egg-title">⭐ MAGISCHE EXPLOSION! ⭐</h2>
+            <p style="font-size: 1.2rem; margin: 2rem 0; font-family: 'Exo 2', sans-serif; font-weight: 700;">
+                Klicke irgendwo für Feuerwerk!
+            </p>
+            <div id="burst-container" style="position: relative; height: 300px; cursor: crosshair; border: 2px solid var(--color-gold); border-radius: 8px; background: rgba(0, 0, 0, 0.3);"></div>
+        </div>
+    `;
+    document.body.appendChild(panel);
+    
+    const burstContainer = panel.querySelector('#burst-container');
+    
+    burstContainer.addEventListener('click', function(e) {
+        const rect = burstContainer.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        // Create burst at click position
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.style.position = 'absolute';
+            particle.style.left = x + 'px';
+            particle.style.top = y + 'px';
+            particle.style.width = '6px';
+            particle.style.height = '6px';
+            particle.style.borderRadius = '50%';
+            
+            const colors = ['#FFD700', '#FFF4A3', '#FF6B6B', '#4ECDC4', '#95E1D3'];
+            particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+            particle.style.boxShadow = `0 0 10px ${particle.style.background}`;
+            
+            const angle = (Math.PI * 2 * i) / 30;
+            const velocity = 50 + Math.random() * 150;
+            const duration = 0.5 + Math.random() * 0.5;
+            
+            particle.animate([
+                { 
+                    transform: 'translate(-50%, -50%) scale(1)', 
+                    opacity: 1 
+                },
+                { 
+                    transform: `translate(calc(-50% + ${Math.cos(angle) * velocity}px), calc(-50% + ${Math.sin(angle) * velocity}px)) scale(0)`,
+                    opacity: 0 
+                }
+            ], {
+                duration: duration * 1000,
+                easing: 'cubic-bezier(0, .9, .57, 1)'
+            });
+            
+            burstContainer.appendChild(particle);
+            
+            setTimeout(function() { particle.remove(); }, duration * 1000);
+        }
+    });
+    
+    panel.querySelector('.easter-egg-close').addEventListener('click', function() {
+        panel.classList.remove('active');
+        setTimeout(function() { panel.remove(); }, 600);
+    });
 }
 
 // ===== KEYBOARD SHORTCUT FOR EASTER EGG =====
