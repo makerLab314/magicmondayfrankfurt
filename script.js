@@ -5,7 +5,11 @@
 const CONFIG = {
     STAR_COUNT: 40, // Number of stars in background (subtle)
     PARTICLE_COUNT: 20, // Floating magic particles
-    RSS_FEED_URL: 'https://www.zaubertricks-online.de/feed/', // Placeholder RSS feed
+    CUP_GAME_AREA: {
+        TOP_PERCENTAGE: 0.6,
+        LEFT_PERCENTAGE: 0.3,
+        RIGHT_PERCENTAGE: 0.7
+    }
 };
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -297,7 +301,6 @@ function createSpark(container) {
 }
 
 // ===== ANIMATED MASCOT - TOP HAT WITH EYES =====
-let mascotInterval = null;
 let jokeIndex = 0;
 const jokes = [
     "Willkommen zur Magic Monday Show! ✨",
@@ -521,7 +524,9 @@ function initDisappearingEasterEgg() {
         const clickY = e.clientY - rect.top;
         const clickX = e.clientX - rect.left;
         
-        if (clickY < rect.height * 0.6 && clickX > rect.width * 0.3 && clickX < rect.width * 0.7) {
+        if (clickY < rect.height * CONFIG.CUP_GAME_AREA.TOP_PERCENTAGE && 
+            clickX > rect.width * CONFIG.CUP_GAME_AREA.LEFT_PERCENTAGE && 
+            clickX < rect.width * CONFIG.CUP_GAME_AREA.RIGHT_PERCENTAGE) {
             return; // This is the cup game area
         }
         
