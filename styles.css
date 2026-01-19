@@ -4,7 +4,7 @@
    ============================================ */
 
 /* ===== FONT IMPORTS ===== */
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Exo+2:wght@400;700&family=Playfair+Display:wght@600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Exo+2:wght@400;700&family=Playfair+Display:wght@600;700&display=swap&font-display=swap');
 
 /* ===== RESET & BASE ===== */
 * {
@@ -204,6 +204,7 @@ body {
 		linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
 	background-size: 50px 50px;
 	opacity: 1;
+	will-change: opacity;
 }
 
 /* Theater: No overlay */
@@ -940,6 +941,16 @@ input[type="submit"]:hover {
 		animation-duration: 0.01ms !important;
 		animation-iteration-count: 1 !important;
 		transition-duration: 0.01ms !important;
+	}
+	
+	/* Disable CRT scanlines for reduced motion */
+	[data-theme="retro-arcade"] body::before {
+		display: none;
+	}
+	
+	/* Reduce cyberpunk grid intensity */
+	[data-theme="cyberpunk"] body::before {
+		opacity: 0.3;
 	}
 }
 

@@ -4,8 +4,14 @@
 
 // ===== THEME SWITCHING SYSTEM =====
 function initThemeSwitcher() {
-    // Load saved theme from localStorage
-    const savedTheme = localStorage.getItem('magicMondayTheme') || 'retro-arcade';
+    // Load saved theme from localStorage with error handling
+    let savedTheme = 'retro-arcade';
+    try {
+        savedTheme = localStorage.getItem('magicMondayTheme') || 'retro-arcade';
+    } catch (e) {
+        console.warn('localStorage not available, using default theme:', e);
+    }
+    
     applyTheme(savedTheme);
     
     // Set theme select value if it exists
@@ -17,7 +23,13 @@ function initThemeSwitcher() {
         themeSelect.addEventListener('change', function() {
             const selectedTheme = this.value;
             applyTheme(selectedTheme, true); // Skip updating select (already updated)
-            localStorage.setItem('magicMondayTheme', selectedTheme);
+            
+            // Save to localStorage with error handling
+            try {
+                localStorage.setItem('magicMondayTheme', selectedTheme);
+            } catch (e) {
+                console.warn('Unable to save theme preference:', e);
+            }
         });
     }
 }
