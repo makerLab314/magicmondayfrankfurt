@@ -143,8 +143,10 @@
 
   // ===== CURSOR GLOW EFFECT =====
   function initCursorGlow() {
-    // Only on larger screens
-    if (window.innerWidth < 768) return;
+    // Only on larger screens - use matchMedia for better responsive behavior
+    const mediaQuery = window.matchMedia('(min-width: 768px)');
+    
+    if (!mediaQuery.matches) return;
     
     const glow = document.createElement('div');
     glow.id = 'cursor-glow';
@@ -188,18 +190,20 @@
 
   // ===== SMOOTH LINK TRANSITIONS =====
   function initSmoothTransitions() {
-    const internalLinks = document.querySelectorAll('a[href^="/"]:not([target="_blank"]), a[href$=".html"]:not([target="_blank"])');
+    // Select internal links - both absolute and relative HTML links
+    const internalLinks = document.querySelectorAll('a[href$=".html"]:not([target="_blank"])');
     
     internalLinks.forEach(link => {
-      // Skip if it's an external link or download
-      if (link.hostname !== window.location.hostname) return;
+      const href = link.getAttribute('href');
+      
+      // Skip external links (those with protocol like http://)
+      if (!href || href.includes('://')) return;
       
       link.addEventListener('click', (e) => {
         // Don't prevent default for keyboard navigation
         if (e.metaKey || e.ctrlKey || e.shiftKey) return;
         
         e.preventDefault();
-        const href = link.getAttribute('href');
         
         // Fade out
         document.body.style.opacity = '0';
