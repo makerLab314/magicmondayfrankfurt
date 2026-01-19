@@ -1,18 +1,118 @@
-// Magic Monday Frankfurt - Premium Brand Identity
-// Elegant, Modern, and Sophisticated Effects
+// ============================================================================
+// MAGIC MONDAY FRANKFURT - COMPLETE WEBSITE REDESIGN
+// Enhanced JavaScript with Theme Switching and All Original Features
+// ============================================================================
 
-// Configuration constants
+// Configuration
 const CONFIG = {
-    STAR_COUNT: 40, // Number of stars in background (subtle)
-    PARTICLE_COUNT: 20, // Floating magic particles
+    STAR_COUNT: 40,
+    PARTICLE_COUNT: 20,
     CUP_GAME_AREA: {
         TOP_PERCENTAGE: 0.6,
         LEFT_PERCENTAGE: 0.3,
         RIGHT_PERCENTAGE: 0.7
-    }
+    },
+    THEMES: {
+        RETRO_ARCADE: 'retro-arcade',
+        ELEGANT_CLUB: 'elegant-club',
+        MODERN_MINIMAL: 'modern-minimal',
+        MYSTICAL_DARK: 'mystical-dark'
+    },
+    DEFAULT_THEME: 'retro-arcade',
+    STORAGE_KEY: 'magicmonday-theme'
 };
 
+// ===== THEME MANAGEMENT =====
+class ThemeManager {
+    constructor() {
+        this.currentTheme = this.loadTheme();
+        this.init();
+    }
+    
+    init() {
+        // Apply theme on page load
+        this.applyTheme(this.currentTheme);
+        
+        // Create theme switcher UI
+        this.createThemeSwitcher();
+        
+        // Add smooth transition class after initial load
+        setTimeout(() => {
+            document.documentElement.classList.add('theme-transitions-enabled');
+        }, 100);
+    }
+    
+    loadTheme() {
+        // Try to load theme from localStorage
+        const saved = localStorage.getItem(CONFIG.STORAGE_KEY);
+        return saved || CONFIG.DEFAULT_THEME;
+    }
+    
+    saveTheme(theme) {
+        localStorage.setItem(CONFIG.STORAGE_KEY, theme);
+    }
+    
+    applyTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        this.currentTheme = theme;
+        this.saveTheme(theme);
+        this.updateActiveButton(theme);
+    }
+    
+    createThemeSwitcher() {
+        const switcher = document.createElement('div');
+        switcher.className = 'theme-switcher';
+        switcher.innerHTML = `
+            <div class="theme-switcher-title">🎨 Themes</div>
+            <div class="theme-buttons">
+                <button class="theme-btn" data-theme="${CONFIG.THEMES.RETRO_ARCADE}">
+                    ⚡ Retro Arcade
+                </button>
+                <button class="theme-btn" data-theme="${CONFIG.THEMES.ELEGANT_CLUB}">
+                    🎩 Elegant Club
+                </button>
+                <button class="theme-btn" data-theme="${CONFIG.THEMES.MODERN_MINIMAL}">
+                    ✨ Modern Minimal
+                </button>
+                <button class="theme-btn" data-theme="${CONFIG.THEMES.MYSTICAL_DARK}">
+                    🌙 Mystical Dark
+                </button>
+            </div>
+        `;
+        
+        document.body.appendChild(switcher);
+        
+        // Add event listeners
+        const buttons = switcher.querySelectorAll('.theme-btn');
+        buttons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const theme = btn.getAttribute('data-theme');
+                this.applyTheme(theme);
+            });
+        });
+        
+        // Set active button
+        this.updateActiveButton(this.currentTheme);
+    }
+    
+    updateActiveButton(theme) {
+        const buttons = document.querySelectorAll('.theme-btn');
+        buttons.forEach(btn => {
+            if (btn.getAttribute('data-theme') === theme) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+    }
+}
+
+// ===== DOM READY INITIALIZATION =====
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize theme manager first
+    const themeManager = new ThemeManager();
+    
+    // Initialize all other features
     initStarfield();
     initParticles();
     initPreloader();
@@ -22,60 +122,132 @@ document.addEventListener('DOMContentLoaded', function() {
     initNewEasterEggs();
 });
 
-// ===== ELEGANT STARFIELD =====
+// ===== STARFIELD BACKGROUND =====
 function initStarfield() {
     const starfield = document.createElement('div');
     starfield.id = 'starfield';
+    starfield.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: -1;
+        overflow: hidden;
+    `;
     document.body.appendChild(starfield);
     
     for (let i = 0; i < CONFIG.STAR_COUNT; i++) {
         const star = document.createElement('div');
         star.className = 'star';
+        star.style.cssText = `
+            position: absolute;
+            background: currentColor;
+            border-radius: 50%;
+            animation: starTwinkle ${3 + Math.random() * 4}s ease-in-out infinite;
+            animation-delay: ${Math.random() * 5}s;
+            opacity: 0.4;
+            color: var(--text-muted, #a0a0cc);
+        `;
         
-        // Random position
         star.style.left = Math.random() * 100 + '%';
         star.style.top = Math.random() * 100 + '%';
         
-        // Small, subtle sizes (1-3px)
         const size = 1 + Math.random() * 2;
         star.style.width = size + 'px';
         star.style.height = size + 'px';
         
-        // Slow, subtle twinkle timing
-        star.style.setProperty('--twinkle-duration', (3 + Math.random() * 4) + 's');
-        star.style.setProperty('--twinkle-delay', (Math.random() * 5) + 's');
-        
         starfield.appendChild(star);
+    }
+    
+    // Add keyframes for star twinkling
+    if (!document.getElementById('star-keyframes')) {
+        const style = document.createElement('style');
+        style.id = 'star-keyframes';
+        style.textContent = `
+            @keyframes starTwinkle {
+                0%, 100% { opacity: 0.2; transform: scale(1); }
+                50% { opacity: 0.6; transform: scale(1.2); }
+            }
+        `;
+        document.head.appendChild(style);
     }
 }
 
-// ===== SMART PRELOADER - Only shows when needed =====
+// ===== PRELOADER =====
 function initPreloader() {
-    // Check if page is already loaded
     if (document.readyState === 'complete') {
-        // Page already loaded, no preloader needed
         return;
     }
     
-    // Create preloader element only if page is still loading
     const preloader = document.createElement('div');
     preloader.id = 'preloader';
+    preloader.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--bg-primary, #0a0014);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 100000;
+        transition: opacity 0.5s ease, visibility 0.5s ease;
+    `;
+    
     preloader.innerHTML = `
-        <div class="preloader-content">
-            <div class="preloader-logo">Magic Monday</div>
-            <div class="preloader-spinner"></div>
+        <div class="preloader-content" style="text-align: center;">
+            <div class="preloader-logo" style="
+                font-family: 'Press Start 2P', monospace;
+                font-size: 1rem;
+                color: var(--color-cyan, #00ffff);
+                letter-spacing: 0.1em;
+                margin-bottom: 2rem;
+                animation: fadeInUp 0.8s ease forwards;
+            ">Magic Monday</div>
+            <div class="preloader-spinner" style="
+                width: 40px;
+                height: 40px;
+                border: 2px solid var(--glass-border, rgba(0, 255, 255, 0.3));
+                border-top-color: var(--color-cyan, #00ffff);
+                border-radius: 50%;
+                animation: spin 1s linear infinite;
+                margin: 0 auto;
+            "></div>
         </div>
     `;
-    document.body.insertBefore(preloader, document.body.firstChild);
     
+    document.body.insertBefore(preloader, document.body.firstChild);
     document.body.classList.add('loading');
     
-    // Hide preloader immediately when page loads
+    // Add spinner animation
+    if (!document.getElementById('spinner-keyframes')) {
+        const style = document.createElement('style');
+        style.id = 'spinner-keyframes';
+        style.textContent = `
+            @keyframes spin {
+                to { transform: rotate(360deg); }
+            }
+            @keyframes fadeInUp {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            body.loading .container {
+                opacity: 0;
+                visibility: hidden;
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
     window.addEventListener('load', function() {
-        preloader.classList.add('hidden');
+        preloader.style.opacity = '0';
+        preloader.style.visibility = 'hidden';
         document.body.classList.remove('loading');
         
-        // Remove preloader from DOM after fade transition
         setTimeout(function() {
             if (preloader.parentNode) {
                 preloader.remove();
@@ -84,39 +256,271 @@ function initPreloader() {
     });
 }
 
+// ===== PARTICLE EFFECTS =====
+function initParticles() {
+    const particleContainer = document.createElement('div');
+    particleContainer.id = 'particle-container';
+    particleContainer.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+        overflow: hidden;
+    `;
+    document.body.appendChild(particleContainer);
+    
+    // Create floating particles
+    for (let i = 0; i < CONFIG.PARTICLE_COUNT; i++) {
+        createParticle(particleContainer);
+    }
+    
+    // Create occasional sparks
+    setInterval(function() {
+        createSpark(particleContainer);
+    }, 2000);
+}
+
+function createParticle(container) {
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+    particle.style.cssText = `
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: var(--color-gold, #ffd700);
+        border-radius: 50%;
+        opacity: 0.6;
+        box-shadow: 0 0 10px currentColor;
+    `;
+    
+    particle.style.left = Math.random() * 100 + '%';
+    particle.style.bottom = '-20px';
+    
+    const duration = 6 + Math.random() * 6;
+    const drift = (Math.random() - 0.5) * 100;
+    
+    particle.style.animation = `floatParticle ${duration}s ease-in-out infinite`;
+    particle.style.animationDelay = Math.random() * 5 + 's';
+    particle.style.setProperty('--drift-x', drift + 'px');
+    
+    container.appendChild(particle);
+    
+    setTimeout(function() {
+        particle.remove();
+        createParticle(container);
+    }, (duration + 5) * 1000);
+}
+
+function createSpark(container) {
+    const spark = document.createElement('div');
+    spark.className = 'spark';
+    spark.style.cssText = `
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        background: var(--color-yellow, #ffff00);
+        border-radius: 50%;
+        box-shadow: 0 0 8px currentColor;
+    `;
+    
+    spark.style.left = Math.random() * 100 + '%';
+    spark.style.top = Math.random() * 100 + '%';
+    
+    const duration = 1 + Math.random() * 2;
+    spark.style.animation = `sparkle ${duration}s ease-in-out infinite`;
+    
+    container.appendChild(spark);
+    
+    setTimeout(function() {
+        spark.remove();
+    }, duration * 1000);
+}
+
+// Add particle animations
+if (!document.getElementById('particle-keyframes')) {
+    const style = document.createElement('style');
+    style.id = 'particle-keyframes';
+    style.textContent = `
+        @keyframes floatParticle {
+            0%, 100% {
+                transform: translateY(0) translateX(0) scale(1);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            50% {
+                transform: translateY(-100vh) translateX(var(--drift-x, 0px)) scale(1.5);
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-120vh) translateX(var(--drift-x, 0px)) scale(0.5);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes sparkle {
+            0%, 100% {
+                opacity: 0;
+                transform: scale(0);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(2);
+            }
+        }
+    `;
+    document.head.appendChild(style);
+}
+
 // ===== EASTER EGG MINI-GAME =====
 function initEasterEgg() {
-    // Create overlay for mini-game
     const overlay = document.createElement('div');
     overlay.id = 'easter-egg-overlay';
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(10, 10, 12, 0.95);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 100001;
+        flex-direction: column;
+        backdrop-filter: blur(10px);
+    `;
+    
     overlay.innerHTML = `
-        <div class="mini-game-container">
-            <div class="mini-game-title">🎩 Hütchenspiel 🐰</div>
-            <p class="game-instructions">
+        <div class="mini-game-container" style="
+            text-align: center;
+            padding: 3rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 2px solid var(--glass-border);
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: var(--shadow-lg);
+        ">
+            <div class="mini-game-title" style="
+                font-family: var(--font-pixel);
+                font-size: 0.875rem;
+                color: var(--color-cyan, #00ffff);
+                margin-bottom: 1.5rem;
+                line-height: 1.6;
+            ">🎩 Hütchenspiel 🐰</div>
+            <p class="game-instructions" style="margin-bottom: 1rem;">
                 Finde den Hasen! Klicke auf einen Hut.
             </p>
-            <div class="cups-container">
-                <div class="cup" data-cup="1"><span class="rabbit">🐰</span></div>
-                <div class="cup" data-cup="2"><span class="rabbit">🐰</span></div>
-                <div class="cup" data-cup="3"><span class="rabbit">🐰</span></div>
+            <div class="cups-container" style="
+                display: flex;
+                gap: 2rem;
+                justify-content: center;
+                margin: 2.5rem 0;
+            ">
+                <div class="cup" data-cup="1" style="
+                    width: 80px;
+                    height: 100px;
+                    background: linear-gradient(180deg, #8c2a3d 0%, #6b1d2d 50%, #4a1420 100%);
+                    border: 2px solid var(--color-gold, #ffd700);
+                    border-radius: 0 0 40px 40px;
+                    cursor: pointer;
+                    transition: all 0.4s ease;
+                    position: relative;
+                    box-shadow: var(--shadow-md);
+                ">
+                    <span class="rabbit" style="
+                        position: absolute;
+                        bottom: -35px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        font-size: 2.5rem;
+                        opacity: 0;
+                        transition: opacity 0.3s ease;
+                    ">🐰</span>
+                </div>
+                <div class="cup" data-cup="2" style="
+                    width: 80px;
+                    height: 100px;
+                    background: linear-gradient(180deg, #8c2a3d 0%, #6b1d2d 50%, #4a1420 100%);
+                    border: 2px solid var(--color-gold, #ffd700);
+                    border-radius: 0 0 40px 40px;
+                    cursor: pointer;
+                    transition: all 0.4s ease;
+                    position: relative;
+                    box-shadow: var(--shadow-md);
+                ">
+                    <span class="rabbit" style="
+                        position: absolute;
+                        bottom: -35px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        font-size: 2.5rem;
+                        opacity: 0;
+                        transition: opacity 0.3s ease;
+                    ">🐰</span>
+                </div>
+                <div class="cup" data-cup="3" style="
+                    width: 80px;
+                    height: 100px;
+                    background: linear-gradient(180deg, #8c2a3d 0%, #6b1d2d 50%, #4a1420 100%);
+                    border: 2px solid var(--color-gold, #ffd700);
+                    border-radius: 0 0 40px 40px;
+                    cursor: pointer;
+                    transition: all 0.4s ease;
+                    position: relative;
+                    box-shadow: var(--shadow-md);
+                ">
+                    <span class="rabbit" style="
+                        position: absolute;
+                        bottom: -35px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        font-size: 2.5rem;
+                        opacity: 0;
+                        transition: opacity 0.3s ease;
+                    ">🐰</span>
+                </div>
             </div>
-            <p class="game-result"></p>
-            <button class="close-game">Schließen</button>
+            <p class="game-result" style="
+                font-weight: 700;
+                color: var(--color-gold, #ffd700);
+                min-height: 1.5rem;
+            "></p>
+            <button class="close-game" style="
+                font-family: var(--font-pixel);
+                font-size: 0.5rem;
+                color: var(--text-muted);
+                background: transparent;
+                border: 1px solid var(--glass-border);
+                border-radius: 4px;
+                padding: 0.75rem 1.5rem;
+                cursor: pointer;
+                margin-top: 1.5rem;
+                transition: all 0.2s ease;
+            ">Schließen</button>
         </div>
     `;
+    
     document.body.appendChild(overlay);
     
-    // Make header image clickable for Easter egg
+    // Make header image clickable
     const headerImage = document.querySelector('#head img');
     if (headerImage) {
         headerImage.style.cursor = 'pointer';
         headerImage.addEventListener('click', function(e) {
-            // Check if click is in the top portion (where logo/hat might be)
             const rect = headerImage.getBoundingClientRect();
             const clickY = e.clientY - rect.top;
             const clickX = e.clientX - rect.left;
             
-            // Trigger if clicking on upper middle area
             if (clickY < rect.height * 0.6 && 
                 clickX > rect.width * 0.3 && 
                 clickX < rect.width * 0.7) {
@@ -141,17 +545,51 @@ function initEasterEgg() {
         cup.addEventListener('click', function() {
             playGame(this);
         });
+        
+        // Hover effect
+        cup.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-10px) scale(1.05)';
+        });
+        cup.addEventListener('mouseleave', function() {
+            if (!this.classList.contains('lifted')) {
+                this.style.transform = '';
+            }
+        });
     });
 }
 
-// Add footer game button
 function initFooterGameButton() {
     const footer = document.getElementById('footer');
     if (footer) {
         const gameBtn = document.createElement('button');
         gameBtn.className = 'footer-game-btn';
+        gameBtn.style.cssText = `
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: 2px solid var(--glass-border);
+            color: var(--text-secondary);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+        `;
         gameBtn.innerHTML = '🎩 Hütchenspiel spielen';
         gameBtn.addEventListener('click', openMiniGame);
+        
+        gameBtn.addEventListener('mouseenter', function() {
+            this.style.background = 'var(--glass-border)';
+            this.style.color = 'var(--text-primary)';
+            this.style.transform = 'translateY(-2px)';
+        });
+        gameBtn.addEventListener('mouseleave', function() {
+            this.style.background = 'transparent';
+            this.style.color = 'var(--text-secondary)';
+            this.style.transform = '';
+        });
         
         const brElement = document.createElement('br');
         footer.insertBefore(brElement, footer.firstChild);
@@ -161,15 +599,13 @@ function initFooterGameButton() {
 
 function openMiniGame() {
     const overlay = document.getElementById('easter-egg-overlay');
-    overlay.classList.add('active');
-    
-    // Reset game state
+    overlay.style.display = 'flex';
     resetGame();
 }
 
 function closeMiniGame() {
     const overlay = document.getElementById('easter-egg-overlay');
-    overlay.classList.remove('active');
+    overlay.style.display = 'none';
 }
 
 function resetGame() {
@@ -177,15 +613,17 @@ function resetGame() {
     const result = document.querySelector('.game-result');
     
     cups.forEach(function(cup) {
-        cup.classList.remove('lifted', 'reveal');
+        cup.style.transform = '';
         cup.style.pointerEvents = 'auto';
+        const rabbit = cup.querySelector('.rabbit');
+        if (rabbit) rabbit.style.opacity = '0';
     });
     
     if (result) {
         result.textContent = '';
     }
     
-    // Randomly place rabbit under one cup
+    // Randomly place rabbit
     const winningCup = Math.floor(Math.random() * 3) + 1;
     cups.forEach(function(cup) {
         if (parseInt(cup.dataset.cup) === winningCup) {
@@ -200,107 +638,39 @@ function playGame(selectedCup) {
     const cups = document.querySelectorAll('.cup');
     const result = document.querySelector('.game-result');
     
-    // Disable all cups
     cups.forEach(function(cup) {
         cup.style.pointerEvents = 'none';
     });
     
-    // Lift selected cup
-    selectedCup.classList.add('lifted');
+    selectedCup.style.transform = 'translateY(-50px)';
     
     setTimeout(function() {
         if (selectedCup.dataset.hasRabbit === 'true') {
-            selectedCup.classList.add('reveal');
+            const rabbit = selectedCup.querySelector('.rabbit');
+            if (rabbit) rabbit.style.opacity = '1';
             if (result) {
                 result.textContent = '🎉 Gewonnen! Du hast den Hasen gefunden!';
-                result.classList.remove('game-result-lose');
-                result.classList.add('game-result-win');
+                result.style.color = 'var(--color-gold, #ffd700)';
             }
         } else {
-            // Show where rabbit actually was
             cups.forEach(function(cup) {
                 if (cup.dataset.hasRabbit === 'true') {
-                    cup.classList.add('lifted', 'reveal');
+                    cup.style.transform = 'translateY(-50px)';
+                    const rabbit = cup.querySelector('.rabbit');
+                    if (rabbit) rabbit.style.opacity = '1';
                 }
             });
             if (result) {
                 result.textContent = '😅 Der Hase war woanders!';
-                result.classList.remove('game-result-win');
-                result.classList.add('game-result-lose');
+                result.style.color = 'var(--color-pink, #ff1493)';
             }
         }
         
-        // Reset after delay
         setTimeout(resetGame, 2500);
     }, 500);
 }
 
-// ===== MAGICAL PARTICLE EFFECTS =====
-function initParticles() {
-    const particleContainer = document.createElement('div');
-    particleContainer.id = 'particle-container';
-    document.body.appendChild(particleContainer);
-    
-    // Create floating particles
-    for (let i = 0; i < CONFIG.PARTICLE_COUNT; i++) {
-        createParticle(particleContainer);
-    }
-    
-    // Create occasional sparks
-    setInterval(function() {
-        createSpark(particleContainer);
-    }, 2000);
-}
-
-function createParticle(container) {
-    const particle = document.createElement('div');
-    particle.className = 'particle';
-    
-    // Random horizontal position
-    particle.style.left = Math.random() * 100 + '%';
-    particle.style.bottom = '-20px';
-    
-    // Random animation duration (6-12 seconds)
-    const duration = 6 + Math.random() * 6;
-    particle.style.setProperty('--float-duration', duration + 's');
-    
-    // Random horizontal drift (-50px to 50px)
-    const drift = (Math.random() - 0.5) * 100;
-    particle.style.setProperty('--drift-x', drift + 'px');
-    
-    // Random delay
-    particle.style.animationDelay = Math.random() * 5 + 's';
-    
-    container.appendChild(particle);
-    
-    // Remove and recreate after animation
-    setTimeout(function() {
-        particle.remove();
-        createParticle(container);
-    }, (duration + 5) * 1000);
-}
-
-function createSpark(container) {
-    const spark = document.createElement('div');
-    spark.className = 'spark';
-    
-    // Random position
-    spark.style.left = Math.random() * 100 + '%';
-    spark.style.top = Math.random() * 100 + '%';
-    
-    // Random animation duration
-    const duration = 1 + Math.random() * 2;
-    spark.style.setProperty('--sparkle-duration', duration + 's');
-    
-    container.appendChild(spark);
-    
-    // Remove after animation
-    setTimeout(function() {
-        spark.remove();
-    }, duration * 1000);
-}
-
-// ===== ANIMATED MASCOT - TOP HAT WITH EYES =====
+// ===== ANIMATED MASCOT =====
 let jokeIndex = 0;
 const jokes = [
     "Willkommen zur Magic Monday Show! ✨",
@@ -316,26 +686,131 @@ const jokes = [
 function initMascot() {
     const mascotContainer = document.createElement('div');
     mascotContainer.id = 'mascot-container';
+    mascotContainer.style.cssText = `
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 10000;
+        pointer-events: none;
+    `;
+    
     mascotContainer.innerHTML = `
-        <div class="mascot">
-            <div class="top-hat">
-                <div class="hat-band"></div>
-            </div>
-            <div class="eyes-container">
-                <div class="eye">
-                    <div class="pupil"></div>
+        <div class="mascot" style="
+            position: relative;
+            width: 120px;
+            height: 140px;
+            cursor: pointer;
+            pointer-events: auto;
+            transition: transform 0.3s ease;
+        ">
+            <div class="top-hat" style="
+                position: absolute;
+                bottom: 40px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 80px;
+                height: 60px;
+                background: linear-gradient(180deg, #1a1a1a 0%, #000 100%);
+                border: 2px solid var(--color-gold, #ffd700);
+                border-radius: 10px 10px 0 0;
+                box-shadow: var(--shadow-md);
+            "></div>
+            <div class="eyes-container" style="
+                position: absolute;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 60px;
+                height: 30px;
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                transition: transform 0.1s ease;
+            ">
+                <div class="eye" style="
+                    width: 20px;
+                    height: 20px;
+                    background: white;
+                    border-radius: 50%;
+                    position: relative;
+                    border: 2px solid var(--color-gold, #ffd700);
+                    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+                ">
+                    <div class="pupil" style="
+                        position: absolute;
+                        width: 8px;
+                        height: 8px;
+                        background: #000;
+                        border-radius: 50%;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        transition: transform 0.1s ease;
+                    "></div>
                 </div>
-                <div class="eye">
-                    <div class="pupil"></div>
+                <div class="eye" style="
+                    width: 20px;
+                    height: 20px;
+                    background: white;
+                    border-radius: 50%;
+                    position: relative;
+                    border: 2px solid var(--color-gold, #ffd700);
+                    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+                ">
+                    <div class="pupil" style="
+                        position: absolute;
+                        width: 8px;
+                        height: 8px;
+                        background: #000;
+                        border-radius: 50%;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        transition: transform 0.1s ease;
+                    "></div>
                 </div>
             </div>
-            <div class="magic-wand"></div>
-            <div class="speech-bubble">
-                <button class="close-bubble">×</button>
-                <p class="bubble-text"></p>
+            <div class="speech-bubble" style="
+                position: absolute;
+                bottom: 150px;
+                right: 0;
+                background: var(--glass-bg);
+                backdrop-filter: blur(20px);
+                border: 2px solid var(--color-gold, #ffd700);
+                border-radius: 12px;
+                padding: 1rem 1.5rem;
+                min-width: 200px;
+                max-width: 300px;
+                box-shadow: var(--shadow-md);
+                opacity: 0;
+                transform: translateX(20px);
+                transition: opacity 0.3s ease, transform 0.3s ease;
+                pointer-events: auto;
+            ">
+                <button class="close-bubble" style="
+                    position: absolute;
+                    top: 5px;
+                    right: 5px;
+                    background: transparent;
+                    border: none;
+                    color: var(--color-gold, #ffd700);
+                    font-size: 1.2rem;
+                    cursor: pointer;
+                    padding: 0;
+                    width: 20px;
+                    height: 20px;
+                    line-height: 1;
+                ">×</button>
+                <p class="bubble-text" style="
+                    font-size: 0.875rem;
+                    margin: 0;
+                    color: var(--text-primary);
+                    line-height: 1.6;
+                "></p>
             </div>
         </div>
     `;
+    
     document.body.appendChild(mascotContainer);
     
     const mascot = mascotContainer.querySelector('.mascot');
@@ -360,80 +835,75 @@ function initMascot() {
             const offsetY = Math.sin(angle) * distance;
             pupil.style.transform = `translate(calc(-50% + ${offsetX}px), calc(-50% + ${offsetY}px))`;
         });
-        
-        // Slight head tilt
-        const tiltX = (e.clientY - mascotCenterY) / 100;
-        const tiltY = -(e.clientX - mascotCenterX) / 100;
-        eyesContainer.style.transform = `translateX(-50%) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
     });
     
     // Blinking animation
     setInterval(function() {
         eyes.forEach(function(eye) {
-            eye.classList.add('blinking');
+            eye.style.transform = 'scaleY(0.1)';
         });
         setTimeout(function() {
             eyes.forEach(function(eye) {
-                eye.classList.remove('blinking');
+                eye.style.transform = 'scaleY(1)';
             });
-        }, 300);
+        }, 150);
     }, 4000);
     
     // Show speech bubble on click
     mascot.addEventListener('click', function() {
         bubbleText.textContent = jokes[jokeIndex];
         jokeIndex = (jokeIndex + 1) % jokes.length;
-        speechBubble.classList.add('visible');
+        speechBubble.style.opacity = '1';
+        speechBubble.style.transform = 'translateX(0)';
         
-        // Auto-hide after 5 seconds
         setTimeout(function() {
-            speechBubble.classList.remove('visible');
+            speechBubble.style.opacity = '0';
+            speechBubble.style.transform = 'translateX(20px)';
         }, 5000);
+    });
+    
+    // Hover effect
+    mascot.addEventListener('mouseenter', function() {
+        this.style.transform = 'scale(1.1) translateY(-5px)';
+    });
+    mascot.addEventListener('mouseleave', function() {
+        this.style.transform = '';
     });
     
     closeBubble.addEventListener('click', function(e) {
         e.stopPropagation();
-        speechBubble.classList.remove('visible');
+        speechBubble.style.opacity = '0';
+        speechBubble.style.transform = 'translateX(20px)';
     });
     
-    // Show initial message after delay
+    closeBubble.addEventListener('mouseenter', function() {
+        this.style.transform = 'rotate(90deg)';
+    });
+    closeBubble.addEventListener('mouseleave', function() {
+        this.style.transform = '';
+    });
+    
+    // Show initial message
     setTimeout(function() {
         bubbleText.textContent = jokes[0];
         jokeIndex = 1;
-        speechBubble.classList.add('visible');
+        speechBubble.style.opacity = '1';
+        speechBubble.style.transform = 'translateX(0)';
         
         setTimeout(function() {
-            speechBubble.classList.remove('visible');
+            speechBubble.style.opacity = '0';
+            speechBubble.style.transform = 'translateX(20px)';
         }, 5000);
     }, 3000);
-    
-    // Periodic random messages
-    setInterval(function() {
-        if (!speechBubble.classList.contains('visible')) {
-            bubbleText.textContent = jokes[jokeIndex];
-            jokeIndex = (jokeIndex + 1) % jokes.length;
-            speechBubble.classList.add('visible');
-            
-            setTimeout(function() {
-                speechBubble.classList.remove('visible');
-            }, 5000);
-        }
-    }, 30000); // Every 30 seconds
 }
 
-// ===== NEW EASTER EGGS - SLIDE FROM LEFT =====
+// ===== ADDITIONAL EASTER EGGS =====
 function initNewEasterEggs() {
-    // Easter Egg #2: Magic Spell Effect (type "abracadabra")
     initSpellEasterEgg();
-    
-    // Easter Egg #3: Disappearing Elements (click logo 5 times quickly)
-    initDisappearingEasterEgg();
-    
-    // Easter Egg #4: Particle Burst (press Shift+M)
     initParticleBurstEasterEgg();
 }
 
-// Easter Egg #2: Magic Spell
+// Magic Spell Easter Egg
 let spellBuffer = '';
 let spellTimeout = null;
 
@@ -458,256 +928,78 @@ function initSpellEasterEgg() {
 }
 
 function showSpellEasterEgg() {
-    const panel = document.createElement('div');
-    panel.className = 'easter-egg-panel active';
-    panel.innerHTML = `
-        <button class="easter-egg-close">✕ Schließen</button>
-        <div class="easter-egg-content">
-            <h2 class="easter-egg-title">🪄 ZAUBERSPRUCH AKTIVIERT! 🪄</h2>
-            <p style="font-size: 1.2rem; margin: 2rem 0; font-family: 'Exo 2', sans-serif; font-weight: 700;">
-                Du hast das magische Wort gesprochen!<br>
-                <span style="color: var(--color-gold); font-size: 1.5rem;">ABRACADABRA!</span>
-            </p>
-            <div id="spell-particles" style="position: relative; height: 200px;"></div>
-        </div>
+    alert('🪄 ZAUBERSPRUCH AKTIVIERT! ✨\n\nDu hast das magische Wort gesprochen:\nABRACADABRA!');
+}
+
+// Particle Burst Easter Egg
+function initParticleBurstEasterEgg() {
+    document.addEventListener('keydown', function(e) {
+        if (e.shiftKey && e.key.toLowerCase() === 'm') {
+            triggerParticleBurst();
+        }
+    });
+}
+
+function triggerParticleBurst() {
+    const burst = document.createElement('div');
+    burst.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        z-index: 9999;
     `;
-    document.body.appendChild(panel);
+    document.body.appendChild(burst);
     
-    // Create burst of particles
-    const particleContainer = panel.querySelector('#spell-particles');
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 30; i++) {
         const particle = document.createElement('div');
-        particle.style.position = 'absolute';
-        particle.style.left = '50%';
-        particle.style.top = '50%';
-        particle.style.width = '8px';
-        particle.style.height = '8px';
-        particle.style.background = 'var(--color-gold)';
-        particle.style.borderRadius = '50%';
-        particle.style.boxShadow = '0 0 10px rgba(255, 215, 0, 1)';
+        particle.style.cssText = `
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: var(--color-gold, #ffd700);
+            border-radius: 50%;
+            box-shadow: 0 0 10px currentColor;
+        `;
         
-        const angle = (Math.PI * 2 * i) / 50;
-        const velocity = 50 + Math.random() * 100;
-        const duration = 1 + Math.random();
+        const angle = (Math.PI * 2 * i) / 30;
+        const velocity = 50 + Math.random() * 150;
+        const duration = 0.5 + Math.random() * 0.5;
+        
+        burst.appendChild(particle);
         
         particle.animate([
-            { transform: 'translate(-50%, -50%) scale(1)', opacity: 1 },
             { 
-                transform: `translate(calc(-50% + ${Math.cos(angle) * velocity}px), calc(-50% + ${Math.sin(angle) * velocity}px)) scale(0)`,
+                transform: 'translate(0, 0) scale(1)', 
+                opacity: 1 
+            },
+            { 
+                transform: `translate(${Math.cos(angle) * velocity}px, ${Math.sin(angle) * velocity}px) scale(0)`,
                 opacity: 0 
             }
         ], {
             duration: duration * 1000,
-            easing: 'ease-out'
+            easing: 'cubic-bezier(0, .9, .57, 1)'
         });
-        
-        particleContainer.appendChild(particle);
     }
     
-    panel.querySelector('.easter-egg-close').addEventListener('click', function() {
-        panel.classList.remove('active');
-        setTimeout(function() { panel.remove(); }, 600);
-    });
+    setTimeout(function() {
+        burst.remove();
+    }, 1500);
 }
 
-// Easter Egg #3: Disappearing Elements
-let logoClickCount = 0;
-let logoClickTimeout = null;
-
-function initDisappearingEasterEgg() {
-    const logo = document.querySelector('#head img');
-    if (!logo) return;
-    
-    logo.addEventListener('click', function(e) {
-        // Skip if it's the cup game trigger area
-        const rect = logo.getBoundingClientRect();
-        const clickY = e.clientY - rect.top;
-        const clickX = e.clientX - rect.left;
-        
-        if (clickY < rect.height * CONFIG.CUP_GAME_AREA.TOP_PERCENTAGE && 
-            clickX > rect.width * CONFIG.CUP_GAME_AREA.LEFT_PERCENTAGE && 
-            clickX < rect.width * CONFIG.CUP_GAME_AREA.RIGHT_PERCENTAGE) {
-            return; // This is the cup game area
-        }
-        
-        clearTimeout(logoClickTimeout);
-        logoClickCount++;
-        
-        if (logoClickCount >= 5) {
-            showDisappearingEasterEgg();
-            logoClickCount = 0;
-        }
-        
-        logoClickTimeout = setTimeout(function() {
-            logoClickCount = 0;
-        }, 2000);
-    });
-}
-
-function showDisappearingEasterEgg() {
-    const panel = document.createElement('div');
-    panel.className = 'easter-egg-panel active';
-    panel.innerHTML = `
-        <button class="easter-egg-close">✕ Schließen</button>
-        <div class="easter-egg-content">
-            <h2 class="easter-egg-title">👻 VERSCHWINDIBUS! 👻</h2>
-            <p style="font-size: 1.2rem; margin: 2rem 0; font-family: 'Exo 2', sans-serif; font-weight: 700;">
-                Lass etwas verschwinden!
-            </p>
-            <div style="display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; margin: 2rem 0;">
-                <button class="vanish-btn" data-target="h1">Überschrift</button>
-                <button class="vanish-btn" data-target="img">Bilder</button>
-                <button class="vanish-btn" data-target="p">Text</button>
-                <button class="vanish-btn" data-target=".star">Sterne</button>
-            </div>
-            <button class="restore-btn" style="margin-top: 1rem;">🔄 Alles zurück</button>
-        </div>
-    `;
-    document.body.appendChild(panel);
-    
-    const vanishedElements = [];
-    
-    panel.querySelectorAll('.vanish-btn').forEach(function(btn) {
-        btn.style.cssText = 'font-family: "Exo 2", sans-serif; font-size: 1rem; font-weight: 700; padding: 1rem 2rem; background: var(--color-bordeaux); color: white; border: 2px solid var(--color-gold); border-radius: 8px; cursor: pointer; transition: var(--transition-smooth);';
-        
-        btn.addEventListener('click', function() {
-            const target = this.getAttribute('data-target');
-            const elements = document.querySelectorAll(target);
-            
-            elements.forEach(function(el) {
-                if (el.style.opacity !== '0') {
-                    vanishedElements.push({ element: el, originalOpacity: el.style.opacity || '1' });
-                    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-                    el.style.opacity = '0';
-                    el.style.transform = 'scale(0) rotate(360deg)';
-                }
-            });
-        });
-        
-        btn.addEventListener('mouseenter', function() {
-            this.style.background = 'var(--color-gold)';
-            this.style.color = 'var(--color-bg-dark)';
-            this.style.transform = 'scale(1.05)';
-        });
-        
-        btn.addEventListener('mouseleave', function() {
-            this.style.background = 'var(--color-bordeaux)';
-            this.style.color = 'white';
-            this.style.transform = 'scale(1)';
-        });
-    });
-    
-    const restoreBtn = panel.querySelector('.restore-btn');
-    restoreBtn.style.cssText = 'font-family: "Exo 2", sans-serif; font-size: 1rem; font-weight: 700; padding: 1rem 2rem; background: var(--color-gold); color: var(--color-bg-dark); border: 2px solid var(--color-gold); border-radius: 8px; cursor: pointer; transition: var(--transition-smooth);';
-    
-    restoreBtn.addEventListener('click', function() {
-        vanishedElements.forEach(function(item) {
-            item.element.style.opacity = item.originalOpacity;
-            item.element.style.transform = 'scale(1) rotate(0deg)';
-        });
-        vanishedElements.length = 0;
-    });
-    
-    panel.querySelector('.easter-egg-close').addEventListener('click', function() {
-        // Restore all before closing
-        vanishedElements.forEach(function(item) {
-            item.element.style.opacity = item.originalOpacity;
-            item.element.style.transform = 'scale(1) rotate(0deg)';
-        });
-        
-        panel.classList.remove('active');
-        setTimeout(function() { panel.remove(); }, 600);
-    });
-}
-
-// Easter Egg #4: Particle Burst
-function initParticleBurstEasterEgg() {
-    document.addEventListener('keydown', function(e) {
-        if (e.shiftKey && e.key.toLowerCase() === 'm') {
-            showParticleBurstEasterEgg();
-        }
-    });
-}
-
-function showParticleBurstEasterEgg() {
-    const panel = document.createElement('div');
-    panel.className = 'easter-egg-panel active';
-    panel.innerHTML = `
-        <button class="easter-egg-close">✕ Schließen</button>
-        <div class="easter-egg-content">
-            <h2 class="easter-egg-title">⭐ MAGISCHE EXPLOSION! ⭐</h2>
-            <p style="font-size: 1.2rem; margin: 2rem 0; font-family: 'Exo 2', sans-serif; font-weight: 700;">
-                Klicke irgendwo für Feuerwerk!
-            </p>
-            <div id="burst-container" style="position: relative; height: 300px; cursor: crosshair; border: 2px solid var(--color-gold); border-radius: 8px; background: rgba(0, 0, 0, 0.3);"></div>
-        </div>
-    `;
-    document.body.appendChild(panel);
-    
-    const burstContainer = panel.querySelector('#burst-container');
-    
-    burstContainer.addEventListener('click', function(e) {
-        const rect = burstContainer.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        // Create burst at click position
-        for (let i = 0; i < 30; i++) {
-            const particle = document.createElement('div');
-            particle.style.position = 'absolute';
-            particle.style.left = x + 'px';
-            particle.style.top = y + 'px';
-            particle.style.width = '6px';
-            particle.style.height = '6px';
-            particle.style.borderRadius = '50%';
-            
-            const colors = ['#FFD700', '#FFF4A3', '#FF6B6B', '#4ECDC4', '#95E1D3'];
-            particle.style.background = colors[Math.floor(Math.random() * colors.length)];
-            particle.style.boxShadow = `0 0 10px ${particle.style.background}`;
-            
-            const angle = (Math.PI * 2 * i) / 30;
-            const velocity = 50 + Math.random() * 150;
-            const duration = 0.5 + Math.random() * 0.5;
-            
-            particle.animate([
-                { 
-                    transform: 'translate(-50%, -50%) scale(1)', 
-                    opacity: 1 
-                },
-                { 
-                    transform: `translate(calc(-50% + ${Math.cos(angle) * velocity}px), calc(-50% + ${Math.sin(angle) * velocity}px)) scale(0)`,
-                    opacity: 0 
-                }
-            ], {
-                duration: duration * 1000,
-                easing: 'cubic-bezier(0, .9, .57, 1)'
-            });
-            
-            burstContainer.appendChild(particle);
-            
-            setTimeout(function() { particle.remove(); }, duration * 1000);
-        }
-    });
-    
-    panel.querySelector('.easter-egg-close').addEventListener('click', function() {
-        panel.classList.remove('active');
-        setTimeout(function() { panel.remove(); }, 600);
-    });
-}
-
-// ===== KEYBOARD SHORTCUT FOR EASTER EGG =====
+// Konami Code Easter Egg
 let konamiCode = [];
 const konamiSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
 
 document.addEventListener('keydown', function(e) {
     konamiCode.push(e.key);
     
-    // Keep only last 10 keys
     if (konamiCode.length > 10) {
         konamiCode.shift();
     }
     
-    // Check if matches Konami code
     if (konamiCode.join(',') === konamiSequence.join(',')) {
         openMiniGame();
         konamiCode = [];
