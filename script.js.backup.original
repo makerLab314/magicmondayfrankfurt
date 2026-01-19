@@ -1,71 +1,5 @@
 // Magic Monday Frankfurt - Premium Brand Identity
 // Elegant, Modern, and Sophisticated Effects
-// 4-Theme Design System with Smooth Switching
-
-// Configuration constants
-const CONFIG = {
-    STAR_COUNT: 40, // Number of stars in background (subtle)
-    PARTICLE_COUNT: 20, // Floating magic particles
-    CUP_GAME_AREA: {
-        TOP_PERCENTAGE: 0.6,
-        LEFT_PERCENTAGE: 0.3,
-        RIGHT_PERCENTAGE: 0.7
-    }
-};
-
-// Valid theme names
-const VALID_THEMES = ['retro-arcade', 'bordeaux-gold', 'cyberpunk', 'theater'];
-
-// ===== THEME SWITCHING SYSTEM =====
-function initThemeSwitcher() {
-    // Load saved theme from localStorage with error handling
-    let savedTheme = 'retro-arcade';
-    try {
-        savedTheme = localStorage.getItem('magicMondayTheme') || 'retro-arcade';
-    } catch (e) {
-        console.warn('localStorage not available, using default theme:', e);
-    }
-    
-    applyTheme(savedTheme);
-    
-    // Set theme select value if it exists
-    const themeSelect = document.getElementById('theme-select');
-    if (themeSelect) {
-        themeSelect.value = savedTheme;
-        
-        // Add change event listener
-        themeSelect.addEventListener('change', function() {
-            const selectedTheme = this.value;
-            applyTheme(selectedTheme, true); // Skip updating select (already updated)
-            
-            // Save to localStorage with error handling
-            try {
-                localStorage.setItem('magicMondayTheme', selectedTheme);
-            } catch (e) {
-                console.warn('Unable to save theme preference:', e);
-            }
-        });
-    }
-}
-
-function applyTheme(themeName, skipSelectUpdate = false) {
-    // Validate theme name
-    if (!VALID_THEMES.includes(themeName)) {
-        console.warn('Invalid theme name:', themeName, '- using default');
-        themeName = 'retro-arcade';
-    }
-    
-    // Apply theme consistently using data-theme attribute for all themes
-    document.body.setAttribute('data-theme', themeName);
-    
-    // Update select if it exists and we're not skipping
-    if (!skipSelectUpdate) {
-        const themeSelect = document.getElementById('theme-select');
-        if (themeSelect) {
-            themeSelect.value = themeName;
-        }
-    }
-}
 
 // Configuration constants
 const CONFIG = {
@@ -79,7 +13,6 @@ const CONFIG = {
 };
 
 document.addEventListener('DOMContentLoaded', function() {
-    initThemeSwitcher(); // Load theme first
     initStarfield();
     initParticles();
     initPreloader();
