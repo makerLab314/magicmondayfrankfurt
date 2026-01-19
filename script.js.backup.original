@@ -1,42 +1,5 @@
 // Magic Monday Frankfurt - Premium Brand Identity
 // Elegant, Modern, and Sophisticated Effects
-// 4-Theme Design System with Smooth Switching
-
-// ===== THEME SWITCHING SYSTEM =====
-function initThemeSwitcher() {
-    // Load saved theme from localStorage
-    const savedTheme = localStorage.getItem('magicMondayTheme') || 'retro-arcade';
-    applyTheme(savedTheme);
-    
-    // Set theme select value if it exists
-    const themeSelect = document.getElementById('theme-select');
-    if (themeSelect) {
-        themeSelect.value = savedTheme;
-        
-        // Add change event listener
-        themeSelect.addEventListener('change', function() {
-            const selectedTheme = this.value;
-            applyTheme(selectedTheme);
-            localStorage.setItem('magicMondayTheme', selectedTheme);
-        });
-    }
-}
-
-function applyTheme(themeName) {
-    // Remove existing theme
-    document.body.removeAttribute('data-theme');
-    
-    // Apply new theme (retro-arcade is default, no attribute needed)
-    if (themeName !== 'retro-arcade') {
-        document.body.setAttribute('data-theme', themeName);
-    }
-    
-    // Update select if it exists
-    const themeSelect = document.getElementById('theme-select');
-    if (themeSelect) {
-        themeSelect.value = themeName;
-    }
-}
 
 // Configuration constants
 const CONFIG = {
@@ -50,7 +13,6 @@ const CONFIG = {
 };
 
 document.addEventListener('DOMContentLoaded', function() {
-    initThemeSwitcher(); // Load theme first
     initStarfield();
     initParticles();
     initPreloader();
