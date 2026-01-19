@@ -16,13 +16,13 @@ function initThemeSwitcher() {
         // Add change event listener
         themeSelect.addEventListener('change', function() {
             const selectedTheme = this.value;
-            applyTheme(selectedTheme);
+            applyTheme(selectedTheme, true); // Skip updating select (already updated)
             localStorage.setItem('magicMondayTheme', selectedTheme);
         });
     }
 }
 
-function applyTheme(themeName) {
+function applyTheme(themeName, skipSelectUpdate = false) {
     // Remove existing theme
     document.body.removeAttribute('data-theme');
     
@@ -31,10 +31,12 @@ function applyTheme(themeName) {
         document.body.setAttribute('data-theme', themeName);
     }
     
-    // Update select if it exists
-    const themeSelect = document.getElementById('theme-select');
-    if (themeSelect) {
-        themeSelect.value = themeName;
+    // Update select if it exists and we're not skipping
+    if (!skipSelectUpdate) {
+        const themeSelect = document.getElementById('theme-select');
+        if (themeSelect) {
+            themeSelect.value = themeName;
+        }
     }
 }
 
