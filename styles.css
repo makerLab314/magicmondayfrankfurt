@@ -4,7 +4,7 @@
    ============================================ */
 
 /* ===== FONT IMPORTS ===== */
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Exo+2:wght@400;700&family=Playfair+Display:wght@600;700&display=swap&font-display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Exo+2:wght@400;700&family=Playfair+Display:wght@600;700&display=swap');
 
 /* ===== RESET & BASE ===== */
 * {
@@ -193,7 +193,7 @@ body {
 		rgba(0, 0, 0, 0.15) 3px
 	);
 	pointer-events: none;
-	z-index: 9999;
+	z-index: 1;
 	opacity: 0.3;
 }
 

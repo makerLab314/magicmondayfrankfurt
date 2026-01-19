@@ -35,6 +35,13 @@ function initThemeSwitcher() {
 }
 
 function applyTheme(themeName, skipSelectUpdate = false) {
+    // Validate theme name
+    const validThemes = ['retro-arcade', 'bordeaux-gold', 'cyberpunk', 'theater'];
+    if (!validThemes.includes(themeName)) {
+        console.warn('Invalid theme name:', themeName, '- using default');
+        themeName = 'retro-arcade';
+    }
+    
     // Apply theme consistently using data-theme attribute for all themes
     document.body.setAttribute('data-theme', themeName);
     
