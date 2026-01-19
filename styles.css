@@ -4,7 +4,7 @@
    ============================================ */
 
 /* ===== FONT IMPORTS ===== */
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Exo+2:wght@400;600;700;800&family=Playfair+Display:wght@400;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Exo+2:wght@400;700&family=Playfair+Display:wght@600;700&display=swap');
 
 /* ===== RESET & BASE ===== */
 * {
@@ -177,7 +177,7 @@ body {
 }
 
 /* Retro Arcade: CRT Scanlines Effect */
-:root body::before {
+body:not([data-theme])::before {
 	content: '';
 	position: fixed;
 	top: 0;
@@ -442,7 +442,9 @@ h3 {
 }
 
 /* Retro Arcade: Pixelated headers */
-:root h1, :root h2, :root h3 {
+body:not([data-theme]) h1,
+body:not([data-theme]) h2,
+body:not([data-theme]) h3 {
 	font-family: var(--font-accent);
 	text-transform: uppercase;
 	letter-spacing: 2px;
