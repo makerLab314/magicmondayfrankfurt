@@ -204,7 +204,6 @@ body {
 		linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
 	background-size: 50px 50px;
 	opacity: 1;
-	will-change: opacity;
 }
 
 /* Theater: No overlay */
@@ -277,8 +276,8 @@ body {
 }
 
 #theme-select option {
-	background: #1a1a1a;
-	color: #ffffff;
+	background: var(--bg-secondary);
+	color: var(--text-primary);
 	padding: 8px;
 }
 

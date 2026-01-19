@@ -2,6 +2,20 @@
 // Elegant, Modern, and Sophisticated Effects
 // 4-Theme Design System with Smooth Switching
 
+// Configuration constants
+const CONFIG = {
+    STAR_COUNT: 40, // Number of stars in background (subtle)
+    PARTICLE_COUNT: 20, // Floating magic particles
+    CUP_GAME_AREA: {
+        TOP_PERCENTAGE: 0.6,
+        LEFT_PERCENTAGE: 0.3,
+        RIGHT_PERCENTAGE: 0.7
+    }
+};
+
+// Valid theme names
+const VALID_THEMES = ['retro-arcade', 'bordeaux-gold', 'cyberpunk', 'theater'];
+
 // ===== THEME SWITCHING SYSTEM =====
 function initThemeSwitcher() {
     // Load saved theme from localStorage with error handling
@@ -36,8 +50,7 @@ function initThemeSwitcher() {
 
 function applyTheme(themeName, skipSelectUpdate = false) {
     // Validate theme name
-    const validThemes = ['retro-arcade', 'bordeaux-gold', 'cyberpunk', 'theater'];
-    if (!validThemes.includes(themeName)) {
+    if (!VALID_THEMES.includes(themeName)) {
         console.warn('Invalid theme name:', themeName, '- using default');
         themeName = 'retro-arcade';
     }
