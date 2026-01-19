@@ -67,17 +67,6 @@ function applyTheme(themeName, skipSelectUpdate = false) {
     }
 }
 
-// Configuration constants
-const CONFIG = {
-    STAR_COUNT: 40, // Number of stars in background (subtle)
-    PARTICLE_COUNT: 20, // Floating magic particles
-    CUP_GAME_AREA: {
-        TOP_PERCENTAGE: 0.6,
-        LEFT_PERCENTAGE: 0.3,
-        RIGHT_PERCENTAGE: 0.7
-    }
-};
-
 document.addEventListener('DOMContentLoaded', function() {
     initThemeSwitcher(); // Load theme first
     initStarfield();
