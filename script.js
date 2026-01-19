@@ -23,13 +23,8 @@ function initThemeSwitcher() {
 }
 
 function applyTheme(themeName, skipSelectUpdate = false) {
-    // Remove existing theme
-    document.body.removeAttribute('data-theme');
-    
-    // Apply new theme (retro-arcade is default, no attribute needed)
-    if (themeName !== 'retro-arcade') {
-        document.body.setAttribute('data-theme', themeName);
-    }
+    // Apply theme consistently using data-theme attribute for all themes
+    document.body.setAttribute('data-theme', themeName);
     
     // Update select if it exists and we're not skipping
     if (!skipSelectUpdate) {

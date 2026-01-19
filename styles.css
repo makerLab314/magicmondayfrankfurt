@@ -23,7 +23,8 @@ html {
    Glassmorphism + Retro Gaming + Magic Elements
    ============================================ */
 
-:root {
+:root,
+[data-theme="retro-arcade"] {
 	/* Colors */
 	--bg-primary: linear-gradient(135deg, #0a0a1a 0%, #1a0a2e 50%, #0a0a1a 100%);
 	--bg-secondary: rgba(15, 15, 35, 0.6);
@@ -177,7 +178,7 @@ body {
 }
 
 /* Retro Arcade: CRT Scanlines Effect */
-body:not([data-theme])::before {
+[data-theme="retro-arcade"] body::before {
 	content: '';
 	position: fixed;
 	top: 0;
@@ -442,9 +443,9 @@ h3 {
 }
 
 /* Retro Arcade: Pixelated headers */
-body:not([data-theme]) h1,
-body:not([data-theme]) h2,
-body:not([data-theme]) h3 {
+[data-theme="retro-arcade"] h1,
+[data-theme="retro-arcade"] h2,
+[data-theme="retro-arcade"] h3 {
 	font-family: var(--font-accent);
 	text-transform: uppercase;
 	letter-spacing: 2px;
