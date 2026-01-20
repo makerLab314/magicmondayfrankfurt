@@ -1174,11 +1174,11 @@ a:hover {
 @keyframes letter-glow {
   0%, 100% {
     letter-spacing: 0.04em;
-    text-shadow: 0 0 8px rgba(244, 228, 188, 0.4);
+    text-shadow: 0 0 8px color-mix(in srgb, var(--champagne) 40%, transparent);
   }
   50% {
     letter-spacing: 0.08em;
-    text-shadow: 0 0 16px rgba(244, 228, 188, 0.6);
+    text-shadow: 0 0 16px color-mix(in srgb, var(--champagne) 60%, transparent);
   }
 }
 

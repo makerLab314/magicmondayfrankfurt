@@ -362,17 +362,31 @@
       return; // Gracefully degrade on touch devices and for users who prefer reduced motion
     }
     
+    // Shared resize handler with debouncing
+    let resizeTimeout;
+    const boundingRects = new WeakMap();
+    
+    const updateBoundingRects = () => {
+      tiltCards.forEach(card => {
+        boundingRects.set(card, card.getBoundingClientRect());
+      });
+    };
+    
+    // Initialize bounding rects
+    updateBoundingRects();
+    
+    // Debounced resize handler
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(updateBoundingRects, 100);
+    }, { passive: true });
+    
     tiltCards.forEach(card => {
-      let boundingRect = card.getBoundingClientRect();
-      
-      // Update bounding rect on resize
-      window.addEventListener('resize', () => {
-        boundingRect = card.getBoundingClientRect();
-      }, { passive: true });
-      
       card.addEventListener('mousemove', (e) => {
-        // Calculate mouse position relative to card center
-        const rect = card.getBoundingClientRect();
+        // Use cached bounding rect
+        const rect = boundingRects.get(card);
+        if (!rect) return;
+        
         const cardCenterX = rect.left + rect.width / 2;
         const cardCenterY = rect.top + rect.height / 2;
         
@@ -383,8 +397,10 @@
         const rotateX = (mouseY / (rect.height / 2)) * -8; // Max 8 degrees
         const rotateY = (mouseX / (rect.width / 2)) * 8;
         
-        // Apply transform
-        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+        // Apply transform using CSS custom property for better performance
+        card.style.setProperty('--tilt-x', `${rotateX}deg`);
+        card.style.setProperty('--tilt-y', `${rotateY}deg`);
+        card.style.transform = `perspective(1000px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) scale3d(1.02, 1.02, 1.02)`;
       });
       
       card.addEventListener('mouseleave', () => {
@@ -425,11 +441,13 @@
         const x = ((e.clientX - rect.left) / rect.width - 0.5) * 10;
         const y = ((e.clientY - rect.top) / rect.height - 0.5) * 10;
         
-        // Apply subtle parallax effect
+        // Apply subtle parallax effect using CSS custom properties
         const content = card.children;
         Array.from(content).forEach((child, index) => {
           const depth = (index + 1) * 0.5;
-          child.style.transform = `translate(${x * depth}px, ${y * depth}px)`;
+          child.style.setProperty('--parallax-x', `${x * depth}px`);
+          child.style.setProperty('--parallax-y', `${y * depth}px`);
+          child.style.transform = `translate(var(--parallax-x, 0), var(--parallax-y, 0))`;
           child.style.transition = 'transform 0.1s ease-out';
         });
       });
@@ -446,21 +464,17 @@
 
   // ===== HOVER MICRO-INTERACTIONS =====
   function initHoverMicroInteractions() {
-    // Letter spacing effect on CTA buttons
-    const ctaButtons = document.querySelectorAll('.cta');
-    
-    ctaButtons.forEach(btn => {
-      const originalSpacing = window.getComputedStyle(btn).letterSpacing;
-      
-      btn.addEventListener('mouseenter', () => {
-        btn.style.letterSpacing = '0.1em';
-        btn.style.transition = 'letter-spacing 0.3s ease, transform 0.3s ease';
-      });
-      
-      btn.addEventListener('mouseleave', () => {
-        btn.style.letterSpacing = originalSpacing;
-      });
-    });
+    // Letter spacing effect on CTA buttons - use CSS classes for better performance
+    const style = document.createElement('style');
+    style.textContent = `
+      .cta {
+        transition: letter-spacing 0.3s ease, transform 0.3s ease;
+      }
+      .cta:hover {
+        letter-spacing: 0.1em;
+      }
+    `;
+    document.head.appendChild(style);
     
     // Shadow breathing effect on cards
     const breathingCards = document.querySelectorAll('.feature-card, .artist-card');
