@@ -137,7 +137,9 @@
   --glass-rim: rgba(45, 212, 191, 0.2);
   --glass-highlight: rgba(45, 212, 191, 0.1);
   
-  /* Glowing accents for dark mode */
+  /* Shadows for dark mode */
+  --shadow-dark: rgba(0, 0, 0, 0.8);
+  --shadow-light: rgba(45, 212, 191, 0.1);
   --shadow-intimate: 0 2px 8px rgba(0,0,0,0.6), 0 0 20px rgba(45, 212, 191, 0.1);
   --shadow-medium: 0 8px 32px rgba(0,0,0,0.7), 0 0 40px rgba(45, 212, 191, 0.15);
   --shadow-dramatic: 0 16px 64px rgba(0,0,0,0.8), 0 0 60px rgba(45, 212, 191, 0.2);
@@ -172,7 +174,9 @@
   --champagne: #ffcccc;
   --brass: #ff0000;
   
-  /* Dramatic shadows for red mode */
+  /* Shadows for red mode */
+  --shadow-dark: rgba(0, 0, 0, 0.9);
+  --shadow-light: rgba(255, 0, 0, 0.2);
   --shadow-intimate: 0 2px 8px rgba(255,0,0,0.4), 0 0 20px rgba(255, 0, 0, 0.2);
   --shadow-medium: 0 8px 32px rgba(255,0,0,0.5), 0 0 40px rgba(255, 0, 0, 0.3);
   --shadow-dramatic: 0 16px 64px rgba(255,0,0,0.6), 0 0 60px rgba(255, 0, 0, 0.4);
