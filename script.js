@@ -8,6 +8,63 @@
 (function() {
   'use strict';
 
+  // ===== THEME SWITCHING LOGIC =====
+  function initThemeSwitching() {
+    const htmlElement = document.documentElement;
+    const darkModeSwitch = document.getElementById('darkModeSwitch');
+    const redModeSwitch = document.getElementById('redModeSwitch');
+    
+    // Load saved theme from localStorage
+    const savedTheme = localStorage.getItem('magicMondayTheme') || 'white';
+    
+    // Apply saved theme
+    applyTheme(savedTheme);
+    
+    // Update switch states based on saved theme
+    if (savedTheme === 'dark') {
+      darkModeSwitch.checked = true;
+    } else if (savedTheme === 'red') {
+      redModeSwitch.checked = true;
+    }
+    
+    // Dark Mode switch handler
+    if (darkModeSwitch) {
+      darkModeSwitch.addEventListener('change', function() {
+        if (this.checked) {
+          // Turn off red mode if it's on
+          if (redModeSwitch) redModeSwitch.checked = false;
+          applyTheme('dark');
+        } else {
+          applyTheme('white');
+        }
+      });
+    }
+    
+    // Red Mode switch handler
+    if (redModeSwitch) {
+      redModeSwitch.addEventListener('change', function() {
+        if (this.checked) {
+          // Turn off dark mode if it's on
+          if (darkModeSwitch) darkModeSwitch.checked = false;
+          applyTheme('red');
+        } else {
+          applyTheme('white');
+        }
+      });
+    }
+    
+    function applyTheme(theme) {
+      htmlElement.setAttribute('data-theme', theme);
+      localStorage.setItem('magicMondayTheme', theme);
+      
+      // Add transition class for smooth theme change
+      htmlElement.style.transition = 'background-color 0.3s ease, color 0.3s ease';
+      setTimeout(() => {
+        htmlElement.style.transition = '';
+      }, 300);
+    }
+  }
+
   // ===== SMOOTH ENTRANCE ANIMATIONS =====
   function initEntranceAnimations() {
     // Fade in main content smoothly
@@ -532,6 +589,7 @@
 
   // ===== INITIALIZE ON DOM READY =====
   function init() {
+    initThemeSwitching();
     initEntranceAnimations();
     initHeaderParallax();
     initCardAnimations();

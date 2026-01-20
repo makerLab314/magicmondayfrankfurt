@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" data-theme="white">
 <head>
 <title>Magic Monday Show Frankfurt in der Käs | Kult, Comedy, Zauberkunst</title>
 <meta charset="utf-8">
@@ -12,6 +12,26 @@
 <script src="script.js" defer></script>
 </head>
 <body>
+<!-- Theme Control Center -->
+<div class="theme-control-center">
+  <div class="theme-switch-wrapper">
+    <label class="theme-switch-label">Dark Mode</label>
+    <label class="switch-lever">
+      <input type="checkbox" id="darkModeSwitch">
+      <div class="button"></div>
+    </label>
+  </div>
+  <div class="theme-switch-wrapper">
+    <label class="theme-switch-label">Red Mode</label>
+    <label class="cosmic-toggle">
+      <input type="checkbox" id="redModeSwitch">
+      <div class="slider-cosmic">
+        <div class="toggle-orb"></div>
+      </div>
+    </label>
+  </div>
+</div>
+
 <div class="container">
 <header>
 <div id="head"><a href="index.html"><img src="images/magicmonday_head.jpg" alt="Magic Monday Show Frankfurt"></a></div>
@@ -37,8 +57,11 @@
       Kartentricks, parapsychologischer Experimente und Comedy der Extraklasse.
     </p>
     <div class="hero__cta">
-      <a class="cta primary neon-cta scanline-overlay" href="termine.html">Tickets sichern</a>
-      <a class="cta ghost" href="show.html">Mehr erfahren</a>
+      <a class="neu-button" href="termine.html">Tickets sichern</a>
+      <a class="text-stroke-button" href="show.html">
+        <span class="hover-text">Mehr erfahren</span>
+        Mehr erfahren
+      </a>
     </div>
     <div class="hero__meta">
       <div class="meta-card">
@@ -95,7 +118,7 @@
       Einmal im Monat wird in der Käs gezaubert. 
       Hol dir jetzt deine Karten für die nächsten Shows.
     </p>
-    <a class="cta primary neon-cta" href="termine.html">Alle Termine ansehen</a>
+    <a class="neu-button" href="termine.html">Alle Termine ansehen</a>
   </div>
   <div class="highlight__list">
     <div class="highlight-row">
