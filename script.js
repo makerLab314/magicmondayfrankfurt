@@ -453,6 +453,10 @@
     cards.forEach(card => {
       card.classList.add('parallax-layer');
       
+      card.addEventListener('mouseenter', () => {
+        card.classList.add('is-active');
+      });
+      
       card.addEventListener('mousemove', (e) => {
         const rect = boundingRects.get(card);
         if (!rect) return;
@@ -460,22 +464,19 @@
         const x = ((e.clientX - rect.left) / rect.width - 0.5) * 10;
         const y = ((e.clientY - rect.top) / rect.height - 0.5) * 10;
         
-        // Apply subtle parallax effect using CSS custom properties
+        // Apply subtle parallax effect using transform only
         const content = card.children;
         Array.from(content).forEach((child, index) => {
           const depth = (index + 1) * 0.5;
-          child.style.setProperty('--parallax-x', `${x * depth}px`);
-          child.style.setProperty('--parallax-y', `${y * depth}px`);
-          child.style.transform = `translate(var(--parallax-x, 0), var(--parallax-y, 0))`;
-          child.style.transition = 'transform 0.1s ease-out';
+          child.style.transform = `translate(${x * depth}px, ${y * depth}px)`;
         });
       });
       
       card.addEventListener('mouseleave', () => {
+        card.classList.remove('is-active');
         const content = card.children;
         Array.from(content).forEach(child => {
           child.style.transform = '';
-          child.style.transition = 'transform 0.3s ease';
         });
       });
     });
@@ -511,15 +512,12 @@
   // ===== PERFORMANCE MONITORING =====
   function capBackgroundAnimations() {
     // Limit the number of simultaneous animations to maintain 60fps
-    let animationCount = 0;
     const MAX_ANIMATIONS = 3;
     
     const animatedElements = document.querySelectorAll('[class*="neon-"], .scanline-overlay');
     
     animatedElements.forEach((el, index) => {
-      if (index < MAX_ANIMATIONS) {
-        animationCount++;
-      } else {
+      if (index >= MAX_ANIMATIONS) {
         // Disable animations for elements beyond the cap
         el.style.animation = 'none';
       }

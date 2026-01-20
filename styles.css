@@ -1144,10 +1144,10 @@ a:hover {
 
 @keyframes shadow-breathe {
   0%, 100% {
-    box-shadow: var(--shadow-intimate), 0 0 20px rgba(201, 162, 39, 0.1);
+    box-shadow: var(--shadow-intimate), 0 0 20px color-mix(in srgb, var(--brass) 10%, transparent);
   }
   50% {
-    box-shadow: var(--shadow-medium), 0 0 40px rgba(201, 162, 39, 0.2);
+    box-shadow: var(--shadow-medium), 0 0 40px color-mix(in srgb, var(--brass) 20%, transparent);
   }
 }
 
@@ -1375,6 +1375,15 @@ a:hover {
 /* Parallax effect on scroll */
 .parallax-layer {
   will-change: transform;
+}
+
+.parallax-layer > * {
+  transition: transform 0.3s ease;
+  will-change: transform;
+}
+
+.parallax-layer.is-active > * {
+  transition: transform 0.1s ease-out;
 }
 
 /* ===== ACCESSIBILITY ===== */
