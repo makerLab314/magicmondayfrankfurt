@@ -598,6 +598,8 @@
   let particleContainer = null;
   let particleAnimationFrame = null;
   let particles = [];
+  let cachedWindowWidth = window.innerWidth;
+  let cachedWindowHeight = window.innerHeight;
   
   function initRedModeParticles() {
     // Check for reduced motion preference
@@ -606,6 +608,17 @@
     
     // Remove existing particles if any
     removeRedModeParticles();
+    
+    // Cache window dimensions
+    cachedWindowWidth = window.innerWidth;
+    cachedWindowHeight = window.innerHeight;
+    
+    // Update cache on window resize
+    const handleResize = () => {
+      cachedWindowWidth = window.innerWidth;
+      cachedWindowHeight = window.innerHeight;
+    };
+    window.addEventListener('resize', handleResize, { passive: true });
     
     // Create particle container
     particleContainer = document.createElement('div');
@@ -621,6 +634,9 @@
       overflow: hidden;
     `;
     document.body.insertBefore(particleContainer, document.body.firstChild);
+    
+    // Store resize handler for cleanup
+    particleContainer._resizeHandler = handleResize;
     
     // Create particles
     const particleCount = 30;
@@ -639,9 +655,9 @@
     // Random size between 1-3px
     const size = Math.random() * 2 + 1;
     
-    // Random starting position
-    const x = Math.random() * window.innerWidth;
-    const y = Math.random() * window.innerHeight;
+    // Random starting position using cached dimensions
+    const x = Math.random() * cachedWindowWidth;
+    const y = Math.random() * cachedWindowHeight;
     
     // Random velocity
     const vx = (Math.random() - 0.5) * 0.5;
@@ -682,11 +698,11 @@
       particle.x += particle.vx;
       particle.y += particle.vy;
       
-      // Wrap around screen edges
-      if (particle.x < 0) particle.x = window.innerWidth;
-      if (particle.x > window.innerWidth) particle.x = 0;
-      if (particle.y < 0) particle.y = window.innerHeight;
-      if (particle.y > window.innerHeight) particle.y = 0;
+      // Wrap around screen edges using cached dimensions
+      if (particle.x < 0) particle.x = cachedWindowWidth;
+      if (particle.x > cachedWindowWidth) particle.x = 0;
+      if (particle.y < 0) particle.y = cachedWindowHeight;
+      if (particle.y > cachedWindowHeight) particle.y = 0;
       
       // Apply position
       particle.element.style.left = particle.x + 'px';
@@ -703,6 +719,10 @@
     }
     
     if (particleContainer) {
+      // Clean up resize handler
+      if (particleContainer._resizeHandler) {
+        window.removeEventListener('resize', particleContainer._resizeHandler);
+      }
       particleContainer.remove();
       particleContainer = null;
     }
