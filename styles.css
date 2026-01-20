@@ -1077,10 +1077,10 @@ a:hover {
 
 /* 1. Primary Button - Neu Button Style */
 .neu-button {
-  background-color: var(--background-color, #e0e0e0);
+  background-color: var(--background-color);
   border-radius: 50px;
   box-shadow: inset 4px 4px 10px var(--shadow-dark, #bcbcbc), inset -4px -4px 10px var(--shadow-light, #ffffff);
-  color: var(--text-color, #4d4d4d);
+  color: var(--text-color);
   cursor: pointer;
   font-size: 18px;
   padding: 15px 40px;
@@ -1098,7 +1098,7 @@ a:hover {
 
 .neu-button:hover {
   box-shadow: inset 2px 2px 5px var(--shadow-dark, #bcbcbc), inset -2px -2px 5px var(--shadow-light, #ffffff), 2px 2px 5px var(--shadow-dark, #bcbcbc), -2px -2px 5px var(--shadow-light, #ffffff);
-  color: var(--text-color, #4d4d4d);
+  color: var(--text-color);
 }
 
 /* 2. Secondary Link - Text Stroke Button Style */
@@ -1110,7 +1110,7 @@ a:hover {
   border: none;
   cursor: pointer;
   --border-right: 6px;
-  --text-stroke-color: rgba(128,128,128,0.6);
+  --text-stroke-color: var(--text-dim);
   --animation-color: #37FF8B;
   --fs-size: 1.2em;
   letter-spacing: 3px;
