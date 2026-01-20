@@ -397,10 +397,8 @@
         const rotateX = (mouseY / (rect.height / 2)) * -8; // Max 8 degrees
         const rotateY = (mouseX / (rect.width / 2)) * 8;
         
-        // Apply transform using CSS custom property for better performance
-        card.style.setProperty('--tilt-x', `${rotateX}deg`);
-        card.style.setProperty('--tilt-y', `${rotateY}deg`);
-        card.style.transform = `perspective(1000px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) scale3d(1.02, 1.02, 1.02)`;
+        // Apply transform directly with calculated values
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
       });
       
       card.addEventListener('mouseleave', () => {
@@ -433,11 +431,32 @@
     
     if (prefersReducedMotion) return;
     
+    // Shared resize handler with debouncing for parallax cards
+    let resizeTimeout;
+    const boundingRects = new WeakMap();
+    
+    const updateBoundingRects = () => {
+      cards.forEach(card => {
+        boundingRects.set(card, card.getBoundingClientRect());
+      });
+    };
+    
+    // Initialize bounding rects
+    updateBoundingRects();
+    
+    // Debounced resize handler
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(updateBoundingRects, 100);
+    }, { passive: true });
+    
     cards.forEach(card => {
       card.classList.add('parallax-layer');
       
       card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
+        const rect = boundingRects.get(card);
+        if (!rect) return;
+        
         const x = ((e.clientX - rect.left) / rect.width - 0.5) * 10;
         const y = ((e.clientY - rect.top) / rect.height - 0.5) * 10;
         
@@ -464,18 +483,6 @@
 
   // ===== HOVER MICRO-INTERACTIONS =====
   function initHoverMicroInteractions() {
-    // Letter spacing effect on CTA buttons - use CSS classes for better performance
-    const style = document.createElement('style');
-    style.textContent = `
-      .cta {
-        transition: letter-spacing 0.3s ease, transform 0.3s ease;
-      }
-      .cta:hover {
-        letter-spacing: 0.1em;
-      }
-    `;
-    document.head.appendChild(style);
-    
     // Shadow breathing effect on cards
     const breathingCards = document.querySelectorAll('.feature-card, .artist-card');
     breathingCards.forEach(card => {
