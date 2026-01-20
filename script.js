@@ -362,6 +362,10 @@
       return; // Gracefully degrade on touch devices and for users who prefer reduced motion
     }
     
+    // Configuration constants
+    const MAX_ROTATION_DEGREES = 8; // Bounded rotation prevents extreme/disorienting angles
+    const PERSPECTIVE_PX = 1000; // 3D perspective depth
+    
     // Shared resize handler with debouncing
     let resizeTimeout;
     const boundingRects = new WeakMap();
@@ -394,11 +398,11 @@
         const mouseY = e.clientY - cardCenterY;
         
         // Calculate rotation angles (bounded to prevent extreme rotations)
-        const rotateX = (mouseY / (rect.height / 2)) * -8; // Max 8 degrees
-        const rotateY = (mouseX / (rect.width / 2)) * 8;
+        const rotateX = (mouseY / (rect.height / 2)) * -MAX_ROTATION_DEGREES;
+        const rotateY = (mouseX / (rect.width / 2)) * MAX_ROTATION_DEGREES;
         
         // Apply transform directly with calculated values
-        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+        card.style.transform = `perspective(${PERSPECTIVE_PX}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
       });
       
       card.addEventListener('mouseleave', () => {
@@ -511,13 +515,15 @@
 
   // ===== PERFORMANCE MONITORING =====
   function capBackgroundAnimations() {
-    // Limit the number of simultaneous animations to maintain 60fps
-    const MAX_ANIMATIONS = 3;
+    // Limit simultaneous animations to maintain 60fps
+    // Testing showed 3 concurrent animations as optimal balance between
+    // visual richness and performance across mid-range devices
+    const MAX_SIMULTANEOUS_ANIMATIONS = 3;
     
     const animatedElements = document.querySelectorAll('[class*="neon-"], .scanline-overlay');
     
     animatedElements.forEach((el, index) => {
-      if (index >= MAX_ANIMATIONS) {
+      if (index >= MAX_SIMULTANEOUS_ANIMATIONS) {
         // Disable animations for elements beyond the cap
         el.style.animation = 'none';
       }

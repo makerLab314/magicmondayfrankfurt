@@ -1129,7 +1129,7 @@ a:hover {
     transform: translateY(-100%);
   }
   100% {
-    transform: translateY(100vh);
+    transform: translateY(300%);
   }
 }
 
@@ -1199,7 +1199,7 @@ a:hover {
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(201, 162, 39, 0.4), transparent);
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--brass) 40%, transparent), transparent);
   pointer-events: none;
   z-index: 2;
   animation: scanline-sweep 8s linear infinite;
