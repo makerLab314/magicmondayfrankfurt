@@ -62,6 +62,13 @@
       setTimeout(() => {
         htmlElement.style.transition = '';
       }, 300);
+      
+      // Activate/deactivate Red Mode particles
+      if (theme === 'red') {
+        initRedModeParticles();
+      } else {
+        removeRedModeParticles();
+      }
     }
   }
 
@@ -585,6 +592,122 @@
         el.style.animation = 'none';
       }
     });
+  }
+
+  // ===== RED MODE PARTICLE EFFECTS =====
+  let particleContainer = null;
+  let particleAnimationFrame = null;
+  let particles = [];
+  
+  function initRedModeParticles() {
+    // Check for reduced motion preference
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+    
+    // Remove existing particles if any
+    removeRedModeParticles();
+    
+    // Create particle container
+    particleContainer = document.createElement('div');
+    particleContainer.id = 'red-mode-particles';
+    particleContainer.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    `;
+    document.body.insertBefore(particleContainer, document.body.firstChild);
+    
+    // Create particles
+    const particleCount = 30;
+    for (let i = 0; i < particleCount; i++) {
+      createParticle();
+    }
+    
+    // Start animation loop
+    animateParticles();
+  }
+  
+  function createParticle() {
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+    
+    // Random size between 1-3px
+    const size = Math.random() * 2 + 1;
+    
+    // Random starting position
+    const x = Math.random() * window.innerWidth;
+    const y = Math.random() * window.innerHeight;
+    
+    // Random velocity
+    const vx = (Math.random() - 0.5) * 0.5;
+    const vy = (Math.random() - 0.5) * 0.5;
+    
+    // Random opacity
+    const opacity = Math.random() * 0.5 + 0.3;
+    
+    particle.style.cssText = `
+      position: absolute;
+      width: ${size}px;
+      height: ${size}px;
+      background: radial-gradient(circle, rgba(255, 0, 0, ${opacity}) 0%, transparent 70%);
+      border-radius: 50%;
+      box-shadow: 0 0 ${size * 3}px rgba(255, 0, 0, ${opacity * 0.8});
+      left: ${x}px;
+      top: ${y}px;
+    `;
+    
+    particleContainer.appendChild(particle);
+    
+    particles.push({
+      element: particle,
+      x: x,
+      y: y,
+      vx: vx,
+      vy: vy,
+      size: size,
+      opacity: opacity
+    });
+  }
+  
+  function animateParticles() {
+    if (!particleContainer) return;
+    
+    particles.forEach(particle => {
+      // Update position
+      particle.x += particle.vx;
+      particle.y += particle.vy;
+      
+      // Wrap around screen edges
+      if (particle.x < 0) particle.x = window.innerWidth;
+      if (particle.x > window.innerWidth) particle.x = 0;
+      if (particle.y < 0) particle.y = window.innerHeight;
+      if (particle.y > window.innerHeight) particle.y = 0;
+      
+      // Apply position
+      particle.element.style.left = particle.x + 'px';
+      particle.element.style.top = particle.y + 'px';
+    });
+    
+    particleAnimationFrame = requestAnimationFrame(animateParticles);
+  }
+  
+  function removeRedModeParticles() {
+    if (particleAnimationFrame) {
+      cancelAnimationFrame(particleAnimationFrame);
+      particleAnimationFrame = null;
+    }
+    
+    if (particleContainer) {
+      particleContainer.remove();
+      particleContainer = null;
+    }
+    
+    particles = [];
   }
 
   // ===== INITIALIZE ON DOM READY =====
